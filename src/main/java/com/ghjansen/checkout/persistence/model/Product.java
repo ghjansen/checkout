@@ -4,14 +4,16 @@ import javax.validation.constraints.NotNull;
 
 public class Product {
 
-    private Long id;
+    @NotNull(message = "Product code is required")
+    private String code;
     @NotNull(message = "Product name is required")
     private String name;
+    @NotNull(message = "Product value is required")
     private Double value;
     private String pictureUrl;
 
-    public Product(Long id, @NotNull(message = "Product name is required") String name, Double value, String pictureUrl) {
-        this.id = id;
+    public Product(@NotNull(message = "Product code is required") String code, @NotNull(message = "Product name is required") String name, @NotNull(message = "Product value is required") Double value, String pictureUrl) {
+        this.code = code;
         this.name = name;
         this.value = value;
         this.pictureUrl = pictureUrl;
@@ -20,12 +22,12 @@ public class Product {
     public Product() {
     }
 
-    public Long getId() {
-        return id;
+    public String getCode() {
+        return code;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String getName() {

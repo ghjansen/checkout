@@ -23,8 +23,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product getProduct(@Min(value = 1L, message = "Invalid product ID") long id) {
-        return this.productRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Product not found"));
+    public Product getProduct(@Min(value = 1L, message = "Invalid product code") String code) {
+        return this.productRepository.findById(code).orElseThrow(() -> new ResourceNotFoundException("Product not found"));
     }
 
     @Override

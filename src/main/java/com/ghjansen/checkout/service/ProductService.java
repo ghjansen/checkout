@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 public interface ProductService {
 
     Product save(Product product);
-    Product getProduct(@Min(value = 1L, message = "Invalid product ID") long id);
+    Product getProduct(@Min(value = 1L, message = "Invalid product code") String code);
     @NotNull Iterable<Product> getAllProducts();
 
 }

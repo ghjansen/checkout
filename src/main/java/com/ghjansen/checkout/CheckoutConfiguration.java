@@ -8,7 +8,8 @@ import org.springframework.context.annotation.Configuration;
 public class CheckoutConfiguration {
 
     @Bean
-    public ProductRepository productRepositoryBean(){
+    public ProductRepository productRepository(){
         return new ProductRepository();
     }
+
 }
