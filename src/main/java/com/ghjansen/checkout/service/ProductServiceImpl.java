@@ -13,18 +13,18 @@ public class ProductServiceImpl implements ProductService {
 
     private ProductRepository productRepository;
 
-    public ProductServiceImpl(ProductRepository productRepository) {
+    public ProductServiceImpl(final ProductRepository productRepository) {
         this.productRepository = productRepository;
     }
 
     @Override
-    public Product save(Product product) {
+    public Product save(final Product product) {
         return this.productRepository.save(product);
     }
 
     @Override
-    public Product getProduct(@Min(value = 1L, message = "Invalid product code") String code) {
-        return this.productRepository.findById(code).orElseThrow(() -> new ResourceNotFoundException("Product not found"));
+    public Product getProduct(@Min(value = 1L, message = "Invalid product id") final Long id) {
+        return this.productRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Product not found"));
     }
 
     @Override

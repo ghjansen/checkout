@@ -6,6 +6,56 @@
     <groupId>com.ghjansen</groupId>
     <artifactId>checkout</artifactId>
     <version>1.0.0-SNAPSHOT</version>
+    <name>checkout</name>
+    <description>Online Store Checkout System</description>
+    <url>https://github.com/ghjansen/checkout</url>
+    <inceptionYear>2019</inceptionYear>
+    <licenses>
+        <license>
+            <name>GNU Affero General Public License, Version 3.0</name>
+            <url>http://www.gnu.org/licenses/agpl-3.0.txt</url>
+        </license>
+    </licenses>
+    <developers>
+        <developer>
+            <id>ghjansen</id>
+            <name>Guilherme Humberto Jansen</name>
+            <email>contact.ghjansen@gmail.com</email>
+            <url>https://github.com/ghjansen</url>
+        </developer>
+    </developers>
+    <properties>
+        <!-- Encoding definitions -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <!-- Java version definition (support required for lambda expressions and diamonds) -->
+        <java.version>1.8</java.version>
+        <!-- Dependencies and Plugins versions -->
+        <spring.boot.version>2.1.3.RELEASE</spring.boot.version>
+        <maven.compiler.version>3.8.0</maven.compiler.version>
+    </properties>
+    <dependencies>
+        <!-- Spring Boot dependency for web development -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <version>${spring.boot.version}</version>
+        </dependency>
+        <!-- Spring Boot DevTools dependency for live modifications during development -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <version>${spring.boot.version}</version>
+            <scope>runtime</scope>
+            <optional>true</optional>
+        </dependency>
+        <!-- Jackson dependency for Java Date/Time API defined by JSR310 -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+            <version>2.9.6</version>
+        </dependency>
+    </dependencies>
     <build>
         <plugins>
             <!-- Plugin for allowing the compilation as a regular maven project (mvn clean install) -->
@@ -26,48 +76,4 @@
             </plugin>
         </plugins>
     </build>
-    <dependencies>
-        <!-- Spring Boot dependency for web development -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-            <version>${spring.boot.version}</version>
-        </dependency>
-        <!-- Spring Boot DevTools dependency for live modifications during development -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-devtools</artifactId>
-            <version>${spring.boot.version}</version>
-            <scope>runtime</scope>
-            <optional>true</optional>
-        </dependency>
-    </dependencies>
-    <properties>
-        <!-- Encoding definitions -->
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <!-- Java version definition (lambda expressions support required) -->
-        <java.version>1.8</java.version>
-        <!-- Dependencies and Plugins versions -->
-        <spring.boot.version>2.1.3.RELEASE</spring.boot.version>
-        <maven.compiler.version>3.8.0</maven.compiler.version>
-    </properties>
-    <name>checkout</name>
-    <description>Online Store Checkout System</description>
-    <url>https://github.com/ghjansen/checkout</url>
-    <inceptionYear>2019</inceptionYear>
-    <licenses>
-        <license>
-            <name>GNU Affero General Public License, Version 3.0</name>
-            <url>http://www.gnu.org/licenses/agpl-3.0.txt</url>
-        </license>
-    </licenses>
-    <developers>
-        <developer>
-            <id>ghjansen</id>
-            <name>Guilherme Humberto Jansen</name>
-            <email>contact.ghjansen@gmail.com</email>
-            <url>https://github.com/ghjansen</url>
-        </developer>
-    </developers>
 </project>
