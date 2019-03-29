@@ -29,7 +29,7 @@ public class CartRepository {
     }
 
     public Optional<Cart> findById(final Long id){
-        return Optional.of(this.carts.get(id));
+        return Optional.ofNullable(this.carts.get(id));
     }
 
     public Iterable<Cart> findAll(){

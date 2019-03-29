@@ -1,6 +1,7 @@
 package com.ghjansen.checkout;
 
 import com.ghjansen.checkout.persistence.model.Product;
+import com.ghjansen.checkout.service.CartService;
 import com.ghjansen.checkout.service.ProductService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -15,11 +16,16 @@ public class CheckoutApplication {
     }
 
     @Bean
-    CommandLineRunner runner(ProductService productService){
+    CommandLineRunner runner(ProductService productService, CartService cartService){
         return args -> {
             productService.save(new Product("VOUCHER", "Voucher", 5.00, "http://placehold.it/200x100"));
             productService.save(new Product("TSHIRT","T-Shirt", 20.00, "http://placehold.it/200x100"));
             productService.save(new Product("MUG","Coffee Mug", 7.50, "http://placehold.it/200x100"));
+
+            cartService.create();
+            cartService.create();
+            cartService.create();
+
         };
     }
 

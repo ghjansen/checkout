@@ -29,7 +29,7 @@ public class CartItemRepository {
     }
 
     public Optional<CartItem> findById(final Long id){
-        return Optional.of(this.cartItems.get(id));
+        return Optional.ofNullable(this.cartItems.get(id));
     }
 
     public Iterable<CartItem> findAll(){

@@ -19,8 +19,8 @@ public final class ApiExceptionHandler {
         ErrorResponse errors = new ErrorResponse();
         for(ConstraintViolation v : e.getConstraintViolations()){
             Error error = new Error();
-            error.setCode(v.getMessageTemplate());
-            error.setMessage(v.getMessage());
+            //error.setCode(v.getMessageTemplate());
+            error.setMessage(v.getMessage() + " - " + v.getPropertyPath().toString());
             errors.addError(error);
         }
         return new ResponseEntity<ErrorResponse>(errors, HttpStatus.BAD_REQUEST);

@@ -2,10 +2,12 @@ package com.ghjansen.checkout.service;
 
 import com.ghjansen.checkout.persistence.model.CartItem;
 import com.ghjansen.checkout.persistence.repository.CartItemRepository;
+import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
+@Service
 public class CartItemServiceImpl implements CartItemService {
 
     private CartItemRepository cartItemRepository;

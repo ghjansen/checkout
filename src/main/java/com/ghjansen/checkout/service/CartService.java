@@ -10,6 +10,7 @@ import javax.validation.constraints.NotNull;
 public interface CartService {
 
     Cart save(final Cart cart);
+    Cart create();
     Cart getCart(@Min(value = 1L, message = "Ivalid cart id") final Long id);
     @NotNull Iterable<Cart> getAllCarts();
 

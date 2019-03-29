@@ -29,7 +29,7 @@ public class ProductRepository {
     }
 
     public Optional<Product> findById(final Long id){
-        return Optional.of(this.products.get(id));
+        return Optional.ofNullable(this.products.get(id));
     }
 
     public Iterable<Product> findAll(){
