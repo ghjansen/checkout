@@ -17,8 +17,10 @@ public class CartItemServiceImpl implements CartItemService {
     }
 
     @Override
-    public CartItem save(CartItem cartItem) {
-        return null;
+    public CartItem save(final CartItem cartItem) {
+        cartItem.setId(this.cartItemRepository.getCandidateId());
+        this.cartItemRepository.save(cartItem);
+        return cartItem;
     }
 
     @Override
@@ -30,4 +32,5 @@ public class CartItemServiceImpl implements CartItemService {
     public @NotNull Iterable<CartItem> getAllCartItems() {
         return null;
     }
+
 }

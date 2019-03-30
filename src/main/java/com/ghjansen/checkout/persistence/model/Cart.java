@@ -8,7 +8,7 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Cart {
+public class Cart implements Entity {
 
     @NotNull(message = "Cart id is required")
     private Long id;
@@ -56,5 +56,10 @@ public class Cart {
 
     public void setCartItems(final List<CartItem> cartItems) {
         this.cartItems = cartItems;
+    }
+
+    public enum Status {
+        open,
+        closed
     }
 }

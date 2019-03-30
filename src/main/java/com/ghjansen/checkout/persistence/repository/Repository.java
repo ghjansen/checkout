@@ -1,5 +1,6 @@
 package com.ghjansen.checkout.persistence.repository;
 
+import com.ghjansen.checkout.persistence.model.Entity;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
@@ -8,7 +9,7 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 
 @Validated
-public abstract class Repository<T> {
+public abstract class Repository<T extends Entity> {
 
     protected final AtomicLong counter;
     protected final HashMap<Long, T> repository;
@@ -18,15 +19,27 @@ public abstract class Repository<T> {
         this.repository = new HashMap<>();
     }
 
-    public abstract T save(@Valid final T entity);
+    public T save(@Valid final T entity){
+        entity.setId(this.counter.incrementAndGet());
+        this.repository.put(entity.getId(), entity);
+        return entity;
+    }
 
-    public abstract Optional<T> findById(final Long id);
+    public Optional<T> findById(final Long id){
+        return Optional.ofNullable(this.repository.get(id));
+    }
 
-    public abstract Iterable<T> findAll();
+    public Iterable<T> findAll(){
+        return this.repository.values();
+    }
 
-    public abstract void delete(final T entity);
+    public void delete(final T entity){
+        this.deleteById(entity.getId());
+    }
 
-    public abstract void deleteById(final Long id);
+    public void deleteById(final Long id){
+        this.repository.remove(id);
+    };
 
     public Long getCandidateId(){
         return this.counter.get()+1;

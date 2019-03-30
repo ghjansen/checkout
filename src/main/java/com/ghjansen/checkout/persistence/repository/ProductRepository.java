@@ -16,31 +16,4 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 public class ProductRepository extends Repository<Product> {
 
-    @Override
-    public Product save(final Product product){
-        product.setId(this.counter.incrementAndGet());
-        this.repository.put(product.getId(), product);
-        return product;
-    }
-
-    @Override
-    public Optional<Product> findById(final Long id){
-        return Optional.ofNullable(this.repository.get(id));
-    }
-
-    @Override
-    public Iterable<Product> findAll(){
-        return this.repository.values();
-    }
-
-    @Override
-    public void delete(final Product product){
-        this.repository.remove(product.getId());
-    }
-
-    @Override
-    public void deleteById(final Long id){
-        this.repository.remove(id);
-    }
-
 }
