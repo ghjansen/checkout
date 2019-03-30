@@ -3,9 +3,7 @@ package com.ghjansen.checkout.persistence.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,9 +12,12 @@ public class Cart {
 
     @NotNull(message = "Cart id is required")
     private Long id;
+    @NotNull(message = "Cart date created is required")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.SSS z")
     private ZonedDateTime dateCreated;
+    @NotNull(message = "Cart status is required")
     private String status;
+    @NotNull(message = "Cart items is required")
     private List<CartItem> cartItems;
 
     public Cart() {

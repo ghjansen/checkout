@@ -1,7 +1,9 @@
 package com.ghjansen.checkout.persistence.repository;
 
 import com.ghjansen.checkout.persistence.model.Product;
+import org.springframework.validation.annotation.Validated;
 
+import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
@@ -12,36 +14,33 @@ import java.util.concurrent.atomic.AtomicLong;
  * must be converted to an empty interface and extends org.springframework.data.repository.CrudRepository,
  * thus eliminating the need to be configured as a bean at {@link com.ghjansen.checkout.CheckoutConfiguration}.
  */
-public class ProductRepository {
+public class ProductRepository extends Repository<Product> {
 
-    private final AtomicLong counter;
-    private final HashMap<Long, Product> products;
-
-    public ProductRepository() {
-        this.counter = new AtomicLong();
-        this.products = new HashMap<Long, Product>();
-    }
-
+    @Override
     public Product save(final Product product){
         product.setId(this.counter.incrementAndGet());
-        this.products.put(product.getId(), product);
+        this.repository.put(product.getId(), product);
         return product;
     }
 
+    @Override
     public Optional<Product> findById(final Long id){
-        return Optional.ofNullable(this.products.get(id));
+        return Optional.ofNullable(this.repository.get(id));
     }
 
+    @Override
     public Iterable<Product> findAll(){
-        return this.products.values();
+        return this.repository.values();
     }
 
+    @Override
     public void delete(final Product product){
-        this.products.remove(product.getId());
+        this.repository.remove(product.getId());
     }
 
+    @Override
     public void deleteById(final Long id){
-        this.products.remove(id);
+        this.repository.remove(id);
     }
 
 }

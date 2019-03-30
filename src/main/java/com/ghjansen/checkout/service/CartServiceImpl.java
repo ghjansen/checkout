@@ -18,7 +18,8 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public Cart save(Cart cart) {
+    public Cart save(final Cart cart) {
+        cart.setId(this.cartRepository.getCandidateId());
         return cartRepository.save(cart);
     }
 

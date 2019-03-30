@@ -19,6 +19,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product save(final Product product) {
+        product.setId(this.productRepository.getCandidateId());
         return this.productRepository.save(product);
     }
 

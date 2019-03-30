@@ -2,9 +2,7 @@ package com.ghjansen.checkout.persistence.repository;
 
 import com.ghjansen.checkout.persistence.model.Cart;
 
-import java.util.HashMap;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * This class handles DAO operations and emulates a database table in memory. <p>
@@ -12,35 +10,33 @@ import java.util.concurrent.atomic.AtomicLong;
  * must be converted to an empty interface and extends org.springframework.data.repository.CrudRepository,
  * thus eliminating the need to be configured as a bean at {@link com.ghjansen.checkout.CheckoutConfiguration}.
  */
-public class CartRepository {
+public class CartRepository extends Repository<Cart> {
 
-    private final AtomicLong counter;
-    private final HashMap<Long, Cart> carts;
-
-    public CartRepository() {
-        this.counter = new AtomicLong();
-        this.carts= new HashMap<>();
-    }
-
+    @Override
     public Cart save(final Cart cart){
         cart.setId(counter.incrementAndGet());
-        this.carts.put(cart.getId(), cart);
+        this.repository.put(cart.getId(), cart);
         return cart;
     }
 
+    @Override
     public Optional<Cart> findById(final Long id){
-        return Optional.ofNullable(this.carts.get(id));
+        return Optional.ofNullable(this.repository.get(id));
     }
 
+    @Override
     public Iterable<Cart> findAll(){
-        return this.carts.values();
+        return this.repository.values();
     }
 
+    @Override
     public void delete(final Cart cart){
-        this.carts.remove(cart.getId());
+        this.repository.remove(cart.getId());
     }
 
+    @Override
     public void deleteById(final Long id){
-        this.carts.remove(id);
+        this.repository.remove(id);
     }
+
 }

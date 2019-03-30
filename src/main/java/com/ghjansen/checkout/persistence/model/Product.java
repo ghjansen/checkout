@@ -1,7 +1,10 @@
 package com.ghjansen.checkout.persistence.model;
 
+import org.springframework.validation.annotation.Validated;
+
 import javax.validation.constraints.NotNull;
 
+@Validated
 public class Product {
 
     @NotNull(message = "Product id is required")
