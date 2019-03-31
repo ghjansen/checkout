@@ -12,9 +12,11 @@ import javax.validation.constraints.NotNull;
 public class CartServiceImpl implements CartService {
 
     private CartRepository cartRepository;
+    private PromotionService promotionService;
 
-    public CartServiceImpl(CartRepository cartRepository) {
+    public CartServiceImpl(final CartRepository cartRepository, final PromotionService promotionService) {
         this.cartRepository = cartRepository;
+        this.promotionService = promotionService;
     }
 
     @Override
@@ -30,6 +32,7 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public @NotNull Cart update(Cart cart) {
+        cart = this.promotionService.applyPromotions(cart);
         return this.cartRepository.update(cart);
     }
 

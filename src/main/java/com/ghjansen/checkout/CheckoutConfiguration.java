@@ -3,6 +3,7 @@ package com.ghjansen.checkout;
 import com.ghjansen.checkout.persistence.repository.CartItemRepository;
 import com.ghjansen.checkout.persistence.repository.CartRepository;
 import com.ghjansen.checkout.persistence.repository.ProductRepository;
+import com.ghjansen.checkout.persistence.repository.PromotionRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -22,6 +23,11 @@ public class CheckoutConfiguration {
     @Bean
     public CartItemRepository cartItemRepository(){
         return new CartItemRepository();
+    }
+
+    @Bean
+    public PromotionRepository propotionRepository(){
+        return new PromotionRepository();
     }
 
 }

@@ -33,6 +33,13 @@ public final class ApiExceptionHandler {
         return new ResponseEntity<Error>(error, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(ResourceConflictException.class)
+    public ResponseEntity<Error> handle(final ResourceConflictException e){
+        Error error = new Error();
+        error.setMessage(e.getMessage());
+        return new ResponseEntity<Error>(error, HttpStatus.BAD_REQUEST);
+    }
+
     private static class Error {
 
         @JsonInclude(JsonInclude.Include.NON_NULL) private String code;

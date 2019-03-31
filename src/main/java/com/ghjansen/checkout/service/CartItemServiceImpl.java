@@ -1,5 +1,6 @@
 package com.ghjansen.checkout.service;
 
+import com.ghjansen.checkout.api.rest.exception.ResourceConflictException;
 import com.ghjansen.checkout.api.rest.exception.ResourceNotFoundException;
 import com.ghjansen.checkout.persistence.model.Cart;
 import com.ghjansen.checkout.persistence.model.CartItem;
@@ -17,7 +18,7 @@ public class CartItemServiceImpl implements CartItemService {
     private CartService cartService;
     private ProductService productService;
 
-    public CartItemServiceImpl(CartItemRepository cartItemRepository, CartService cartService, ProductService productService) {
+    public CartItemServiceImpl(final CartItemRepository cartItemRepository, final CartService cartService, final ProductService productService) {
         this.cartItemRepository = cartItemRepository;
         this.cartService = cartService;
         this.productService = productService;
@@ -26,22 +27,18 @@ public class CartItemServiceImpl implements CartItemService {
     @Override
     public CartItem save(final CartItem cartItem) {
         cartItem.setId(this.cartItemRepository.getCandidateId());
-        this.cartItemRepository.save(cartItem);
-        return cartItem;
+        return this.cartItemRepository.save(cartItem);
     }
 
     @Override
     public @NotNull CartItem create(final Long cartId, @Min(value = 1L, message = "Ivalid cart item quantity") final Long quantity, @Min(value = 1L, message = "Ivalid cart item product id") final Long productId) {
-        final Cart cart;
-        if(cartId != null){
-            cart = this.cartService.getCart(cartId);
-        } else {
-            cart = this.cartService.create();
-        }
+        final Cart cart = getExistentOrNewCart(cartId);
         final Product product = this.productService.getProduct(productId);
+        preventDuplicateCartItem(cart, product);
         final CartItem cartItem = new CartItem(cart.getId(), quantity, product);
         save(cartItem);
         cart.getCartItems().add(cartItem);
+        this.cartService.update(cart);
         return cartItem;
     }
 
@@ -62,5 +59,25 @@ public class CartItemServiceImpl implements CartItemService {
         cart.getCartItems().remove(cartItem);
         this.cartService.update(cart);
         this.cartItemRepository.delete(cartItem);
+    }
+
+    private Cart getExistentOrNewCart(Long cartId){
+        if(cartId != null){
+            return this.cartService.getCart(cartId);
+        } else {
+            return this.cartService.create();
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private <X extends Throwable> void preventDuplicateCartItem(Cart c, Product p) throws X {
+        for(CartItem i : c.getCartItems()){
+            if(i.getProduct().getId().equals(p.getId())){
+                throw (X) new ResourceConflictException("The product "+
+                p.getId()+" was already included in the cart "+
+                c.getId()+" through the cart item "+
+                i.getId());
+            }
+        }
     }
 }
