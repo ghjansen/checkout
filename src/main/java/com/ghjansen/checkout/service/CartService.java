@@ -12,6 +12,7 @@ public interface CartService {
 
     Cart save(final Cart cart);
     @NotNull Cart create();
+    @NotNull Cart update(final Cart cart);
     Cart getCart(@Min(value = 1L, message = "Ivalid cart id") final Long id);
     @NotNull Iterable<Cart> getAllCarts();
 

@@ -33,6 +33,11 @@ public abstract class Repository<T extends Entity> {
         return this.repository.values();
     }
 
+    public T update(@Valid final T entity){
+        this.repository.put(entity.getId(), entity);
+        return entity;
+    }
+
     public void delete(final T entity){
         this.deleteById(entity.getId());
     }

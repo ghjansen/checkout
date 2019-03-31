@@ -26,6 +26,10 @@ public class Product implements Entity {
         this(null, code, name, value, pictureUrl);
     }
 
+    public Product(){
+
+    }
+
     public Long getId() {
         return id;
     }

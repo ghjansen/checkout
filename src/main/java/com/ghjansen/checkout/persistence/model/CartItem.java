@@ -20,6 +20,16 @@ public class CartItem implements Entity {
         this.product = product;
     }
 
+    public CartItem(@NotNull(message = "Cart item cart id is required") Long cartId, @NotNull(message = "Cart item quantity is required") Long quantity, @NotNull(message = "Cart item product is required") Product product) {
+        this.cartId = cartId;
+        this.quantity = quantity;
+        this.product = product;
+    }
+
+    public CartItem(){
+
+    }
+
     public Long getId() {
         return id;
     }

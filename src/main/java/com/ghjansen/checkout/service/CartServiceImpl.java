@@ -29,6 +29,11 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
+    public @NotNull Cart update(Cart cart) {
+        return this.cartRepository.update(cart);
+    }
+
+    @Override
     public Cart getCart(@Min(value = 1L, message = "Ivalid cart id") final Long id) {
         return this.cartRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Cart not found"));
     }
