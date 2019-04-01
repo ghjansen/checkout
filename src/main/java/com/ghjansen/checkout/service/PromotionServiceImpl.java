@@ -24,13 +24,13 @@ public class PromotionServiceImpl implements PromotionService {
     }
 
     @Override
-    public Promotion save(final Promotion promotion) {
+    public @NotNull Promotion save(final Promotion promotion) {
         promotion.setId(this.promotionRepository.getCandidateId());
         return this.promotionRepository.save(promotion);
     }
 
     @Override
-    public Promotion getPromotion(@Min(value = 1L, message = "Invalid promotion id") final Long id) {
+    public @NotNull Promotion getPromotion(@Min(value = 1L, message = "Invalid promotion id") final Long id) {
         return this.promotionRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Promotion not found"));
     }
 

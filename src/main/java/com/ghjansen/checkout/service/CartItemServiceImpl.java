@@ -25,7 +25,7 @@ public class CartItemServiceImpl implements CartItemService {
     }
 
     @Override
-    public CartItem save(final CartItem cartItem) {
+    public @NotNull CartItem save(final CartItem cartItem) {
         cartItem.setId(this.cartItemRepository.getCandidateId());
         return this.cartItemRepository.save(cartItem);
     }
@@ -47,7 +47,7 @@ public class CartItemServiceImpl implements CartItemService {
     }
 
     @Override
-    public CartItem getCartItem(@Min(value = 1L, message = "Ivalid cart item id") final Long id) {
+    public @NotNull CartItem getCartItem(@Min(value = 1L, message = "Ivalid cart item id") final Long id) {
         return this.cartItemRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Cart item not found"));
     }
 

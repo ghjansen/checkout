@@ -14,13 +14,12 @@ public class PromotionController {
 
     private PromotionService promotionService;
 
-    public PromotionController(PromotionService promotionService) {
+    public PromotionController(final PromotionService promotionService) {
         this.promotionService = promotionService;
     }
 
     @GetMapping(value = {""})
-    @NotNull
-    public Iterable<Promotion> getPromotions(){
+    public @NotNull Iterable<Promotion> getPromotions(){
         synchronized (this.promotionService){
             return this.promotionService.getAllPromotions();
         }

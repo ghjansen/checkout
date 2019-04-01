@@ -10,8 +10,8 @@ import javax.validation.constraints.NotNull;
 @Validated
 public interface PromotionService {
 
-    Promotion save(final Promotion promotion);
-    Promotion getPromotion(@Min(value = 1L, message = "Invalid promotion id") final Long id);
+    @NotNull Promotion save(final Promotion promotion);
+    @NotNull Promotion getPromotion(@Min(value = 1L, message = "Invalid promotion id") final Long id);
     @NotNull Iterable<Promotion> getAllPromotions();
     @NotNull Cart applyPromotions(final Cart cart);
 

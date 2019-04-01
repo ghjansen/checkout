@@ -18,13 +18,13 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product save(final Product product) {
+    public @NotNull Product save(final Product product) {
         product.setId(this.productRepository.getCandidateId());
         return this.productRepository.save(product);
     }
 
     @Override
-    public Product getProduct(@Min(value = 1L, message = "Invalid product id") final Long id) {
+    public @NotNull Product getProduct(@Min(value = 1L, message = "Invalid product id") final Long id) {
         return this.productRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Product not found"));
     }
 

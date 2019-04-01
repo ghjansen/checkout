@@ -13,12 +13,12 @@ public class CartItemController {
 
     private CartItemService cartItemService;
 
-    public CartItemController(CartItemService cartItemService) {
+    public CartItemController(final CartItemService cartItemService) {
         this.cartItemService = cartItemService;
     }
 
     @GetMapping(value = {""})
-    @NotNull public Iterable<CartItem> getCartItems(){
+    public @NotNull Iterable<CartItem> getCartItems(){
         synchronized (this.cartItemService){
             return this.cartItemService.getAllCartItems();
         }
@@ -26,14 +26,14 @@ public class CartItemController {
     }
 
     @PostMapping(value = {""})
-    @NotNull public CartItem createCartItem(@RequestParam(value="cartId", defaultValue="") Long cartId, @RequestParam(value="quantity", defaultValue="1") Long quantity, @NotEmpty @RequestParam(value="productId") Long productId){
+    public @NotNull CartItem createCartItem(@RequestParam(value="cartId", defaultValue="") Long cartId, @RequestParam(value="quantity", defaultValue="1") Long quantity, @NotEmpty @RequestParam(value="productId") Long productId){
         synchronized (this.cartItemService){
             return this.cartItemService.create(cartId, quantity, productId);
         }
     }
 
     @GetMapping(value = {"/{id}"})
-    @NotNull public CartItem getCartItem(@PathVariable("id") Long id){
+    public @NotNull CartItem getCartItem(@PathVariable("id") Long id){
         synchronized (this.cartItemService){
             return this.cartItemService.getCartItem(id);
         }

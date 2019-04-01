@@ -12,7 +12,7 @@ public class CartController {
 
     private CartService cartService;
 
-    public CartController(CartService cartService) {
+    public CartController(final CartService cartService) {
         this.cartService = cartService;
     }
 
@@ -31,7 +31,7 @@ public class CartController {
     }
 
     @GetMapping(value = {"/{id}"})
-    public Cart getCart(@PathVariable("id") Long id){
+    public @NotNull Cart getCart(@PathVariable("id") Long id){
         synchronized (this.cartService){
             return this.cartService.getCart(id);
         }

@@ -20,13 +20,13 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public Cart save(final Cart cart) {
+    public @NotNull Cart save(final Cart cart) {
         cart.setId(this.cartRepository.getCandidateId());
         return cartRepository.save(cart);
     }
 
     @Override
-    public Cart create() {
+    public @NotNull Cart create() {
         return save(new Cart());
     }
 
@@ -39,7 +39,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public Cart getCart(@Min(value = 1L, message = "Ivalid cart id") final Long id) {
+    public @NotNull Cart getCart(@Min(value = 1L, message = "Ivalid cart id") final Long id) {
         return this.cartRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Cart not found"));
     }
 
