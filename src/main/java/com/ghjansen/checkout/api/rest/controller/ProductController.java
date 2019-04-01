@@ -21,11 +21,15 @@ public class ProductController {
 
     @GetMapping(value = {""})
     public @NotNull Iterable<Product> getProducts() {
-        return this.productService.getAllProducts();
+        synchronized (this.productService){
+            return this.productService.getAllProducts();
+        }
     }
 
     @GetMapping(value = {"/{id}"})
     public @NotNull Product getProduct(@PathVariable("id") Long id){
-        return this.productService.getProduct(id);
+        synchronized (this.productService){
+            return this.productService.getProduct(id);
+        }
     }
 }

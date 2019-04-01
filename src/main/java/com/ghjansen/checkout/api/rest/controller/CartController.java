@@ -18,17 +18,23 @@ public class CartController {
 
     @GetMapping(value = {""})
     public @NotNull Iterable<Cart> getCarts(){
-        return this.cartService.getAllCarts();
+        synchronized (this.cartService){
+            return this.cartService.getAllCarts();
+        }
     }
 
     @PostMapping(value = {""})
     public @NotNull Cart createCart(){
-        return this.cartService.create();
+        synchronized (this.cartService){
+            return this.cartService.create();
+        }
     }
 
     @GetMapping(value = {"/{id}"})
     public Cart getCart(@PathVariable("id") Long id){
-        return this.cartService.getCart(id);
+        synchronized (this.cartService){
+            return this.cartService.getCart(id);
+        }
     }
 
 }

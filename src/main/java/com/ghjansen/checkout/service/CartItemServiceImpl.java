@@ -32,14 +32,18 @@ public class CartItemServiceImpl implements CartItemService {
 
     @Override
     public @NotNull CartItem create(final Long cartId, @Min(value = 1L, message = "Ivalid cart item quantity") final Long quantity, @Min(value = 1L, message = "Ivalid cart item product id") final Long productId) {
-        final Cart cart = getExistentOrNewCart(cartId);
-        final Product product = this.productService.getProduct(productId);
-        preventDuplicateCartItem(cart, product);
-        final CartItem cartItem = new CartItem(cart.getId(), quantity, product);
-        save(cartItem);
-        cart.getCartItems().add(cartItem);
-        this.cartService.update(cart);
-        return cartItem;
+        synchronized (this.cartService){
+            synchronized (this.productService){
+                final Cart cart = getExistentOrNewCart(cartId);
+                final Product product = this.productService.getProduct(productId);
+                preventDuplicateCartItem(cart, product);
+                final CartItem cartItem = new CartItem(cart.getId(), quantity, product);
+                save(cartItem);
+                cart.getCartItems().add(cartItem);
+                this.cartService.update(cart);
+                return cartItem;
+            }
+        }
     }
 
     @Override
@@ -54,11 +58,13 @@ public class CartItemServiceImpl implements CartItemService {
 
     @Override
     public void removeCartItem(@Min(value = 1L, message = "Ivalid cart item id") final Long id) {
-        final CartItem cartItem = getCartItem(id);
-        final Cart cart = this.cartService.getCart(cartItem.getCartId());
-        cart.getCartItems().remove(cartItem);
-        this.cartService.update(cart);
-        this.cartItemRepository.delete(cartItem);
+        synchronized (this.cartService){
+            final CartItem cartItem = getCartItem(id);
+            final Cart cart = this.cartService.getCart(cartItem.getCartId());
+            cart.getCartItems().remove(cartItem);
+            this.cartService.update(cart);
+            this.cartItemRepository.delete(cartItem);
+        }
     }
 
     private Cart getExistentOrNewCart(Long cartId){

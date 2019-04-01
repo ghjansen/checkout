@@ -21,6 +21,8 @@ public class PromotionController {
     @GetMapping(value = {""})
     @NotNull
     public Iterable<Promotion> getPromotions(){
-        return this.promotionService.getAllPromotions();
+        synchronized (this.promotionService){
+            return this.promotionService.getAllPromotions();
+        }
     }
 }

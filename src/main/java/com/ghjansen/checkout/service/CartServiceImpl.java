@@ -32,8 +32,10 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public @NotNull Cart update(Cart cart) {
-        cart = this.promotionService.applyPromotions(cart);
-        return this.cartRepository.update(cart);
+        synchronized (this.promotionService){
+            cart = this.promotionService.applyPromotions(cart);
+            return this.cartRepository.update(cart);
+        }
     }
 
     @Override
