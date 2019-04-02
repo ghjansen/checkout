@@ -37,4 +37,11 @@ public class CartController {
         }
     }
 
+    @PostMapping(value = {"/{id}"})
+    public @NotNull Cart closeCart(@PathVariable("id") Long id){
+        synchronized (this.cartService){
+            return this.cartService.closeCart(id);
+        }
+    }
+
 }

@@ -13,7 +13,7 @@ public class OrderItem implements Entity {
     @NotNull(message = "Order item product is required")
     private Product product;
 
-    public OrderItem(@NotNull(message = "Order item order id is required") Long orderId, @NotNull(message = "Order item quantity is required") Long quantity, @NotNull(message = "Order item product is required") Product product) {
+    public OrderItem(@NotNull(message = "Order item order id is required") final Long orderId, @NotNull(message = "Order item quantity is required") final Long quantity, @NotNull(message = "Order item product is required") Product product) {
         this.orderId = orderId;
         this.quantity = quantity;
         this.product = product;

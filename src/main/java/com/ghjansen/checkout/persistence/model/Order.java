@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import javax.validation.constraints.NotNull;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Order implements Entity {
@@ -23,16 +24,12 @@ public class Order implements Entity {
     @NotNull(message = "Order total price is required")
     private Double totalPrice;
 
-    public Order(@NotNull(message = "Order cart id is required") final Long cartId,@NotNull(message = "Order items is required") final List<OrderItem> orderItems, @NotNull(message = "Order promotions is required") final List<Promotion> promotions, @NotNull(message = "Order total price is required") final Double totalPrice) {
-        this.cartId = cartId;
-        this.dateCreated = ZonedDateTime.now(ZoneId.of("UTC"));
-        this.orderItems = orderItems;
-        this.promotions = promotions;
-        this.totalPrice = totalPrice;
-    }
-
     public Order(){
-
+        this.cartId = 0L;
+        this.dateCreated = ZonedDateTime.now(ZoneId.of("UTC"));
+        this.orderItems = new ArrayList<>();
+        this.promotions = new ArrayList<>();
+        this.totalPrice = 0D;
     }
 
     public Long getId() {

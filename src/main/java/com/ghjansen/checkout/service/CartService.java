@@ -15,5 +15,6 @@ public interface CartService {
     @NotNull Cart update(final Cart cart);
     @NotNull Cart getCart(@Min(value = 1L, message = "Ivalid cart id") final Long id);
     @NotNull Iterable<Cart> getAllCarts();
+    @NotNull Cart closeCart(@Min(value = 1L, message = "Ivalid cart id") final Long id);
 
 }

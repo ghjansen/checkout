@@ -2,21 +2,29 @@ package com.ghjansen.checkout.service;
 
 import com.ghjansen.checkout.api.rest.exception.ResourceNotFoundException;
 import com.ghjansen.checkout.persistence.model.Cart;
+import com.ghjansen.checkout.persistence.model.CartItem;
+import com.ghjansen.checkout.persistence.model.Order;
+import com.ghjansen.checkout.persistence.model.OrderItem;
 import com.ghjansen.checkout.persistence.repository.CartRepository;
 import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 
 @Service
 public class CartServiceImpl implements CartService {
 
     private CartRepository cartRepository;
     private PromotionService promotionService;
+    private OrderService orderService;
+    private OrderItemService orderItemService;
 
-    public CartServiceImpl(final CartRepository cartRepository, final PromotionService promotionService) {
+    public CartServiceImpl(final CartRepository cartRepository, final PromotionService promotionService, final OrderService orderService, final OrderItemService orderItemService) {
         this.cartRepository = cartRepository;
         this.promotionService = promotionService;
+        this.orderService = orderService;
+        this.orderItemService = orderItemService;
     }
 
     @Override
@@ -46,5 +54,32 @@ public class CartServiceImpl implements CartService {
     @Override
     public @NotNull Iterable<Cart> getAllCarts() {
         return this.cartRepository.findAll();
+    }
+
+    @Override
+    public @NotNull Cart closeCart(@Min(value = 1L, message = "Ivalid cart id") final Long id) {
+        synchronized (this.orderItemService){
+            synchronized (this.orderService){
+                Cart cart = getCart(id);
+                createOrderFromCart(cart);
+                cart.setStatus(Cart.Status.closed.name());
+                return this.cartRepository.update(cart);
+            }
+        }
+    }
+
+    private void createOrderFromCart(Cart cart){
+        Order order = this.orderService.create();
+        ArrayList<OrderItem> orderItems = new ArrayList<>();
+        for(CartItem cartItem : cart.getCartItems()){
+            OrderItem orderItem = new OrderItem(order.getId(), cartItem.getQuantity(), cartItem.getProduct());
+            orderItem = this.orderItemService.save(orderItem);
+            orderItems.add(orderItem);
+        }
+        order.setOrderItems(orderItems);
+        order.setPromotions(cart.getPromotions());
+        order.setTotalPrice(cart.getTotalPrice());
+        order.setCartId(cart.getId());
+        this.orderService.update(order);
     }
 }

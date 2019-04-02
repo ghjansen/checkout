@@ -24,6 +24,16 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public @NotNull Order create() {
+        return save(new Order());
+    }
+
+    @Override
+    public @NotNull Order update(final Order order) {
+        return this.orderRepository.update(order);
+    }
+
+    @Override
     public @NotNull Order getOrder(@Min(value = 1L, message = "Invalid order id") final Long id) {
         return this.orderRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Order not found"));
     }
