@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <style>
+table, td, th {
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th, td {
+  padding: 5px;
+}
+
+tr:nth-child(even){background-color: #f2f2f2}
+
+code {
+	border: 1px solid #ddd;
+    background-color: #eee;
+}
+
+</style>
+</head>
+<body><h1>Checkout System</h1>
+<p>Welcome to the <strong>Checkout System</strong>!</p>
+<p>This is an experimental implementation of a checkout system, as part of a online store. This system was developed using Spring Boot and a synchronized strategy for the emulation of persistence in memory.</p>
+<p>Current supported main features are: create a new cart, add items to the cart, remove items from the cart and close the cart placing a new order. All these operations are supported through the RESTful web service.</p>
+<h2>How to use</h2>
+<p>The table below shows the REST API specification, followed by few examples on how to use some of the features.</p>
+<table>
+<thead>
+<tr><th>Path </th><th> Method </th><th> Action </th><th> Return </th><th> Parameters</th></tr>
+</thead>
+<tbody>
+<tr><td><code>/</code></td><td> <code>GET</code> </td><td> N/A </td><td> Index page (this page) </td><td> N/A</td></tr>
+<tr><td><code>/api/products</code> </td><td> <code>GET</code> </td><td> N/A </td><td> List of products </td><td> N/A</td></tr>
+<tr><td><code>/api/products/{id}</code> </td><td> <code>GET</code> </td><td> N/A </td><td> A product </td><td> <code>id</code>*</td></tr>
+<tr><td><code>/api/carts</code> </td><td> <code>GET</code> </td><td> N/A </td><td> List of carts </td><td> N/A</td></tr>
+<tr><td><code>/api/carts</code> </td><td> <code>POST</code> </td><td> Create a new cart </td><td> A cart </td><td> N/A</td></tr>
+<tr><td><code>/api/carts/{id}</code> </td><td> <code>GET</code> </td><td> N/A </td><td> A cart </td><td> <code>id</code>*</td></tr>
+<tr><td><code>/api/carts/{id}</code> </td><td> <code>POST</code> </td><td> Close cart and place order </td><td> A cart </td><td> <code>id</code>*</td></tr>
+<tr><td><code>/api/cartitems</code> </td><td> <code>GET</code> </td><td> N/A </td><td> List of cart items </td><td> N/A</td></tr>
+<tr><td><code>/api/cartitems</code> </td><td> <code>POST</code> </td><td> Create new cart item and add it to the informed cart; if <code>cartId</code> omitted, create new cart and add the new cart item to it </td><td> A cart item </td><td> <code>cartId</code>, <code>quantity</code>, <code>productId</code>*</td></tr>
+<tr><td><code>/api/cartitems/{id}</code> </td><td> <code>GET</code> </td><td> N/A </td><td> A cart item </td><td> <code>id</code>*</td></tr>
+<tr><td><code>/api/cartitems/{id}</code> </td><td> <code>DELETE</code> </td><td> Remove cart item </td><td> N/A </td><td> <code>id</code>*</td></tr>
+<tr><td><code>/api/orders</code> </td><td> <code>GET</code> </td><td> N/A </td><td> List of orders </td><td> N/A</td></tr>
+<tr><td><code>/api/orders/{id}</code> </td><td> <code>GET</code> </td><td> N/A </td><td> A order </td><td> <code>id</code>*</td></tr>
+<tr><td><code>/api/orderitems</code> </td><td> <code>GET</code> </td><td> N/A </td><td> List of order items </td><td> N/A</td></tr>
+<tr><td><code>/api/orderitems/{id}</code> </td><td> <code>GET</code> </td><td> N/A </td><td> A order item </td><td> <code>id</code>*</td></tr>
+<tr><td><code>/api/promotions</code> </td><td> <code>GET</code> </td><td> N/A </td><td> List of promotions </td><td> N/A</td></tr>
+<tr><td><code>/api/promotions/{id}</code> </td><td> <code>GET</code> </td><td> N/A </td><td> A promotion </td><td> <code>id</code>*</td></tr>
+</tbody>
+</table>
+<p>* = required</p>
+<h3>Examples</h3>
+<p>The following examples use <code>curl</code> command to perform some of the operations described above.</p>
+<ol>
+<li>Create a new cart<p> <code>$ curl -X POST http://localhost:8080/api/carts</code></li>
+<li>Add a item to cart <code>1</code> with <code>3</code> units of product <code>2</code><p> <code>$ curl -X POST http://localhost:8080/api/cartitems -d &quot;cartId=1&quot; -d &quot;quantity=3&quot; -d &quot;productId=2&quot;</code></li>
+<li>Create a new cart adding a item to this cart with <code>2</code> units of product <code>1</code><p> <code>$ curl -X POST http://localhost:8080/api/cartitems -d &quot;quantity=2&quot; -d &quot;productId=1&quot;</code></li>
+<li>List all cart items<p> <code>$ curl -X GET http://localhost:8080/api/cartitems</code></li>
+<li>Remove cart item <code>2</code><p> <code>$ curl -X DELETE http://localhost:8080/api/cartitems/2</code></li>
+<li>List all carts<p> <code>$ curl -X GET http://localhost:8080/api/carts</code></li>
+<li>lose cart <code>1</code> and place an order for it<p> <code>$ curl -X POST http://localhost:8080/api/carts/1</code></li>
+<li>List all orders<p> <code>$ curl -X GET http://localhost:8080/api/orders</code></li>
+</ol>
+</body>
+</html>
