@@ -2,6 +2,9 @@ package com.ghjansen.checkout.persistence.model;
 
 import javax.validation.constraints.NotNull;
 
+/**
+ * The entity that holds all information about product
+ */
 public class Product implements Entity {
 
     @NotNull(message = "Product id is required")

@@ -8,6 +8,9 @@ import org.springframework.stereotype.Service;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
+/**
+ * The implementation of the service
+ */
 @Service
 public class ProductServiceImpl implements ProductService {
 

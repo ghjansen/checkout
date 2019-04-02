@@ -8,6 +8,12 @@ import java.util.HashMap;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 
+/**
+ * Abstract repository that replaces the usage of the interface
+ * org.springframework.data.repository.CrudRepository in all the
+ * repository concrete classes.
+ * @param <T> the entity to be managed by this repository
+ */
 @Validated
 public abstract class Repository<T extends Entity> {
 

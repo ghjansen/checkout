@@ -8,6 +8,9 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The entity that holds all information about cart
+ */
 public class Cart implements Entity {
 
     @NotNull(message = "Cart id is required")

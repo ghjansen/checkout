@@ -6,6 +6,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * The default error controller for exceptions not handled by {@link ApiExceptionHandler}
+ */
 @Controller
 public class ErrorController implements org.springframework.boot.web.servlet.error.ErrorController {
 

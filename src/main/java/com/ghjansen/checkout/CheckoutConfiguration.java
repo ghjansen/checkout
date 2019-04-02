@@ -4,6 +4,12 @@ import com.ghjansen.checkout.persistence.repository.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * Spring Boot configuration required to load repositories as beans,
+ * which would not be necessary if the repositories were implementing
+ * the interface org.springframework.data.repository.CrudRepository
+ * as they would be automatically loaded as beans.
+ */
 @Configuration
 public class CheckoutConfiguration {
 

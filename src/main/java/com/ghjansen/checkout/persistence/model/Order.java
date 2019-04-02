@@ -8,6 +8,9 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The entity that holds all information about order
+ */
 public class Order implements Entity {
 
     @NotNull(message = "Order id is required")

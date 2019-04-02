@@ -11,6 +11,9 @@ import javax.validation.ConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The controller advice that handles exceptions from the controllers
+ */
 @RestControllerAdvice
 public final class ApiExceptionHandler {
 

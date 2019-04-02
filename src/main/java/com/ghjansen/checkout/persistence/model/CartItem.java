@@ -2,6 +2,9 @@ package com.ghjansen.checkout.persistence.model;
 
 import javax.validation.constraints.NotNull;
 
+/**
+ * The entity that holds all information about cart item
+ */
 public class CartItem implements Entity {
 
     @NotNull(message = "Cart item id is required")

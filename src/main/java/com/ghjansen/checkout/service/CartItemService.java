@@ -6,6 +6,9 @@ import org.springframework.validation.annotation.Validated;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
+/**
+ * The definition of the service to be used synchronously by other services and by its own controller
+ */
 @Validated
 public interface CartItemService {
 

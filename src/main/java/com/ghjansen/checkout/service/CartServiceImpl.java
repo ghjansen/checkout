@@ -13,6 +13,9 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 
+/**
+ * The implementation of the service with synchronization applied when accessing other services
+ */
 @Service
 public class CartServiceImpl implements CartService {
 

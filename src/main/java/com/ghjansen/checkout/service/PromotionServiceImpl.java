@@ -14,6 +14,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+/**
+ * The implementation of the service
+ */
 @Service
 public class PromotionServiceImpl implements PromotionService {
 

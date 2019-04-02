@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.constraints.NotNull;
 
+/**
+ * The order controller that handles REST requests
+ */
 @RestController
 @RequestMapping("/api/orders")
 public class OrderController {

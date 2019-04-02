@@ -2,6 +2,9 @@ package com.ghjansen.checkout.persistence.model;
 
 import javax.validation.constraints.NotNull;
 
+/**
+ * The entity that holds all information about promotion
+ */
 public class Promotion implements Entity {
 
     @NotNull(message = "Promotion id is required")
