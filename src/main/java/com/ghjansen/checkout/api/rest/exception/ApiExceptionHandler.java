@@ -33,8 +33,8 @@ public final class ApiExceptionHandler {
         return new ResponseEntity<Error>(error, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(ResourceConflictException.class)
-    public ResponseEntity<Error> handle(final ResourceConflictException e){
+    @ExceptionHandler(InvalidStateException.class)
+    public ResponseEntity<Error> handle(final InvalidStateException e){
         Error error = new Error();
         error.setMessage(e.getMessage());
         return new ResponseEntity<Error>(error, HttpStatus.BAD_REQUEST);

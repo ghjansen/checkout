@@ -1,5 +1,6 @@
 package com.ghjansen.checkout.service;
 
+import com.ghjansen.checkout.api.rest.exception.InvalidStateException;
 import com.ghjansen.checkout.api.rest.exception.ResourceNotFoundException;
 import com.ghjansen.checkout.persistence.model.Cart;
 import com.ghjansen.checkout.persistence.model.CartItem;
@@ -58,9 +59,10 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public @NotNull Cart closeCart(@Min(value = 1L, message = "Ivalid cart id") final Long id) {
+        Cart cart = getCart(id);
+        preventClosedCartChanges(cart);
         synchronized (this.orderItemService){
             synchronized (this.orderService){
-                Cart cart = getCart(id);
                 createOrderFromCart(cart);
                 cart.setStatus(Cart.Status.closed.name());
                 return this.cartRepository.update(cart);
@@ -81,5 +83,13 @@ public class CartServiceImpl implements CartService {
         order.setTotalPrice(cart.getTotalPrice());
         order.setCartId(cart.getId());
         this.orderService.update(order);
+    }
+
+    @SuppressWarnings("unchecked")
+    public <X extends Throwable> void preventClosedCartChanges(Cart c) throws X {
+        if(c.getStatus().equals(Cart.Status.closed.name())){
+            throw (X) new InvalidStateException("Cart " +
+                    c.getId() + " was already closed. Requested operation rejected");
+        }
     }
 }

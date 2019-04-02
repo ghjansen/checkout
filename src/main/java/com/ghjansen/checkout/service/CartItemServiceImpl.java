@@ -1,6 +1,6 @@
 package com.ghjansen.checkout.service;
 
-import com.ghjansen.checkout.api.rest.exception.ResourceConflictException;
+import com.ghjansen.checkout.api.rest.exception.InvalidStateException;
 import com.ghjansen.checkout.api.rest.exception.ResourceNotFoundException;
 import com.ghjansen.checkout.persistence.model.Cart;
 import com.ghjansen.checkout.persistence.model.CartItem;
@@ -35,6 +35,7 @@ public class CartItemServiceImpl implements CartItemService {
         synchronized (this.cartService){
             synchronized (this.productService){
                 final Cart cart = getExistentOrNewCart(cartId);
+                this.cartService.preventClosedCartChanges(cart);
                 final Product product = this.productService.getProduct(productId);
                 preventDuplicateCartItem(cart, product);
                 final CartItem cartItem = new CartItem(cart.getId(), quantity, product);
@@ -61,6 +62,7 @@ public class CartItemServiceImpl implements CartItemService {
         synchronized (this.cartService){
             final CartItem cartItem = getCartItem(id);
             final Cart cart = this.cartService.getCart(cartItem.getCartId());
+            this.cartService.preventClosedCartChanges(cart);
             cart.getCartItems().remove(cartItem);
             this.cartService.update(cart);
             this.cartItemRepository.delete(cartItem);
@@ -79,7 +81,7 @@ public class CartItemServiceImpl implements CartItemService {
     private <X extends Throwable> void preventDuplicateCartItem(Cart c, Product p) throws X {
         for(CartItem i : c.getCartItems()){
             if(i.getProduct().getId().equals(p.getId())){
-                throw (X) new ResourceConflictException("The product "+
+                throw (X) new InvalidStateException("The product "+
                 p.getId()+" was already included in the cart "+
                 c.getId()+" through the cart item "+
                 i.getId());
