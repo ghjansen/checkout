@@ -66,8 +66,25 @@ code {
 <li>List all cart items<p> <code>$ curl -X GET http://localhost:8080/api/cartitems</code></li>
 <li>Remove cart item <code>2</code><p> <code>$ curl -X DELETE http://localhost:8080/api/cartitems/2</code></li>
 <li>List all carts<p> <code>$ curl -X GET http://localhost:8080/api/carts</code></li>
-<li>lose cart <code>1</code> and place an order for it<p> <code>$ curl -X POST http://localhost:8080/api/carts/1</code></li>
+<li>Close cart <code>1</code> and place an order for it<p> <code>$ curl -X POST http://localhost:8080/api/carts/1</code></li>
 <li>List all orders<p> <code>$ curl -X GET http://localhost:8080/api/orders</code></li>
+</ol>
+<h2>How to build and run</h2>
+<h3>Running from Spring Boot Maven Plugin</h3>
+<ol>
+<li>Run the following Maven command from the project folder<p> <code>$ mvn spring-boot:run</code></li>
+</ol>
+<h3>Running from executable jar file</h3>
+<ol>
+<li>Make sure that the property <code>packing.type</code> is with the value <code>jar</code> in the <code>pom.xml</code> file<p> <code>... &lt;packing.type&gt;jar&lt;/packing.type&gt; ...</code></li>
+<li>Run the following Maven command from the project folder<p> <code>mvn clean install</code></li>
+<li>Run the following Java command from the project folder<p> <code>java -jar target/checkout-1.0.0-SNAPSHOT.jar</code></li>
+</ol>
+<h3>Running from executable war file</h3>
+<ol>
+<li>Make sure that the property <code>packing.type</code> is with the value <code>war</code> in the <code>pom.xml</code> file<p> <code>... &lt;packing.type&gt;war&lt;/packing.type&gt; ...</code></li>
+<li>Run the following Maven command from the project folder<p> <code>mvn clean install</code></li>
+<li>Run the following Java command from the project folder<p> <code>java -jar target/checkout-1.0.0-SNAPSHOT.war</code></li>
 </ol>
 </body>
 </html>

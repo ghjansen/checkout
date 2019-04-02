@@ -57,11 +57,51 @@ $ curl -X DELETE http://localhost:8080/api/cartitems/2
 ```
 $ curl -X GET http://localhost:8080/api/carts
 ```
-7. lose cart `1` and place an order for it<p>
+7. Close cart `1` and place an order for it<p>
 ```
 $ curl -X POST http://localhost:8080/api/carts/1
 ```
 8. List all orders<p>
 ```
 $ curl -X GET http://localhost:8080/api/orders
+```
+
+## How to build and run
+
+### Running from Spring Boot Maven Plugin
+1. Run the following Maven command from the project folder<p>
+```
+$ mvn spring-boot:run
+```
+
+### Running from executable jar file
+1. Make sure that the property `packing.type` is with the value `jar` in the `pom.xml` file<p>
+```
+...
+<packing.type>jar</packing.type>
+...
+```
+2. Run the following Maven command from the project folder<p>
+```
+mvn clean install
+```
+3. Run the following Java command from the project folder<p>
+```
+java -jar target/checkout-1.0.0-SNAPSHOT.jar
+```
+
+### Running from executable war file
+1. Make sure that the property `packing.type` is with the value `war` in the `pom.xml` file<p>
+```
+...
+<packing.type>war</packing.type>
+...
+```
+2. Run the following Maven command from the project folder<p>
+```
+mvn clean install
+```
+3. Run the following Java command from the project folder<p>
+```
+java -jar target/checkout-1.0.0-SNAPSHOT.war
 ```
