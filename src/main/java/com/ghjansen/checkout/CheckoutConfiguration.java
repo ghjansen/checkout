@@ -13,11 +13,12 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class CheckoutConfiguration {
 
+    /*
     @Bean
     public ProductRepository productRepository(){
         return new ProductRepository();
     }
-
+    */
     @Bean
     public CartRepository cartRepository() {
         return new CartRepository();

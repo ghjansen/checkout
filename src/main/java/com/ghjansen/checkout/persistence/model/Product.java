@@ -1,23 +1,26 @@
 package com.ghjansen.checkout.persistence.model;
 
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
-/**
- * The entity that holds all information about product
- */
-public class Product implements Entity {
+@Entity
+public class Product {
 
-    @NotNull(message = "Product id is required")
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotNull(message = "Product code is required")
+    @Basic(optional = false)
     private String code;
     @NotNull(message = "Product name is required")
+    @Basic(optional = false)
     private String name;
     @NotNull(message = "Product value is required")
+    @Basic(optional = false)
     private Double value;
     private String pictureUrl;
 
-    public Product(@NotNull(message = "Product id is required") final Long id, @NotNull(message = "Product code is required") final String code, @NotNull(message = "Product name is required") final String name, @NotNull(message = "Product value is required") final Double value, final String pictureUrl) {
+    public Product(Long id, @NotNull(message = "Product code is required") String code, @NotNull(message = "Product name is required") String name, @NotNull(message = "Product value is required") Double value, String pictureUrl) {
         this.id = id;
         this.code = code;
         this.name = name;
@@ -25,19 +28,14 @@ public class Product implements Entity {
         this.pictureUrl = pictureUrl;
     }
 
-    public Product(@NotNull(message = "Product code is required") final String code, @NotNull(message = "Product name is required") final String name, @NotNull(message = "Product value is required") final Double value, final String pictureUrl) {
-        this(null, code, name, value, pictureUrl);
-    }
-
-    public Product(){
-
+    public Product() {
     }
 
     public Long getId() {
         return id;
     }
 
-    public void setId(final Long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -45,7 +43,7 @@ public class Product implements Entity {
         return code;
     }
 
-    public void setCode(final String code) {
+    public void setCode(String code) {
         this.code = code;
     }
 
@@ -53,7 +51,7 @@ public class Product implements Entity {
         return name;
     }
 
-    public void setName(final String name) {
+    public void setName(String name) {
         this.name = name;
     }
 
@@ -61,7 +59,7 @@ public class Product implements Entity {
         return value;
     }
 
-    public void setValue(final Double value) {
+    public void setValue(Double value) {
         this.value = value;
     }
 
@@ -69,7 +67,7 @@ public class Product implements Entity {
         return pictureUrl;
     }
 
-    public void setPictureUrl(final String pictureUrl) {
+    public void setPictureUrl(String pictureUrl) {
         this.pictureUrl = pictureUrl;
     }
 }
