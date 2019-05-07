@@ -1,19 +1,23 @@
 package com.ghjansen.checkout.persistence.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * The entity that holds all information about order
- */
-public class Order implements Entity {
+@Entity
+@Table(name = "orders")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property="id")
+public class Order {
 
-    @NotNull(message = "Order id is required")
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotNull(message = "Order cart id is required")
     private Long cartId;
@@ -27,6 +31,19 @@ public class Order implements Entity {
     @NotNull(message = "Order total price is required")
     private Double totalPrice;
 
+    public Order(Long id, @NotNull(message = "Order cart id is required") Long cartId, @NotNull(message = "Order date created is required") ZonedDateTime dateCreated, @NotNull(message = "Order items is required") List<OrderItem> orderItems, @NotNull(message = "Order promotions is required") List<Promotion> promotions, @NotNull(message = "Order total price is required") Double totalPrice) {
+        this.id = id;
+        this.cartId = cartId;
+        this.dateCreated = dateCreated;
+        this.orderItems = orderItems;
+        this.promotions = promotions;
+        this.totalPrice = totalPrice;
+    }
+
+    public Order() {
+    }
+
+    /*
     public Order(){
         this.cartId = 0L;
         this.dateCreated = ZonedDateTime.now(ZoneId.of("UTC"));
@@ -34,6 +51,7 @@ public class Order implements Entity {
         this.promotions = new ArrayList<>();
         this.totalPrice = 0D;
     }
+    */
 
     public Long getId() {
         return id;

@@ -8,9 +8,6 @@ import org.springframework.stereotype.Service;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
-/**
- * The implementation of the service
- */
 @Service
 public class OrderItemServiceImpl implements OrderItemService {
 
@@ -22,7 +19,6 @@ public class OrderItemServiceImpl implements OrderItemService {
 
     @Override
     public @NotNull OrderItem save(final OrderItem orderItem) {
-        orderItem.setId(this.orderItemRepository.getCandidateId());
         return this.orderItemRepository.save(orderItem);
     }
 

@@ -1,13 +1,16 @@
 package com.ghjansen.checkout.persistence.model;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 
-/**
- * The entity that holds all information about order item
- */
-public class OrderItem implements Entity {
+@Entity
+public class OrderItem {
 
-    @NotNull(message = "Order item id is required")
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotNull(message = "Order item order id is required")
     private Long orderId;
@@ -16,7 +19,8 @@ public class OrderItem implements Entity {
     @NotNull(message = "Order item product is required")
     private Product product;
 
-    public OrderItem(@NotNull(message = "Order item order id is required") final Long orderId, @NotNull(message = "Order item quantity is required") final Long quantity, @NotNull(message = "Order item product is required") Product product) {
+    public OrderItem(Long id, @NotNull(message = "Order item order id is required") Long orderId, @NotNull(message = "Order item quantity is required") Long quantity, @NotNull(message = "Order item product is required") Product product) {
+        this.id = id;
         this.orderId = orderId;
         this.quantity = quantity;
         this.product = product;

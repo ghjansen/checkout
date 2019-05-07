@@ -1,13 +1,8 @@
 package com.ghjansen.checkout.persistence.repository;
 
 import com.ghjansen.checkout.persistence.model.Order;
+import org.springframework.data.repository.CrudRepository;
 
-/**
- * This class handles DAO operations and emulates a database table in memory. <p>
- * In order to have the repository integrated with a database like H2, this class
- * must be converted to an empty interface and extends org.springframework.data.repository.CrudRepository,
- * thus eliminating the need to be configured as a bean at {@link com.ghjansen.checkout.CheckoutConfiguration}.
- */
-public class OrderRepository extends Repository<Order> {
+public interface OrderRepository extends CrudRepository<Order, Long> {
 
 }

@@ -8,9 +8,6 @@ import org.springframework.stereotype.Service;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
-/**
- * The implementation of the service
- */
 @Service
 public class ProductServiceImpl implements ProductService {
 
@@ -22,7 +19,6 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public @NotNull Product save(final Product product) {
-        product.setId(this.productRepository.getCandidateId());
         return this.productRepository.save(product);
     }
 

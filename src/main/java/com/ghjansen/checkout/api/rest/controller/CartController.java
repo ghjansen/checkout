@@ -6,9 +6,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
 
-/**
- * The cart controller that handles REST requests
- */
 @RestController
 @RequestMapping("/api/carts")
 public class CartController {

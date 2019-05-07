@@ -11,9 +11,6 @@ import org.springframework.stereotype.Service;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
-/**
- * The implementation of the service with synchronization applied when accessing other services
- */
 @Service
 public class CartItemServiceImpl implements CartItemService {
 
@@ -29,7 +26,6 @@ public class CartItemServiceImpl implements CartItemService {
 
     @Override
     public @NotNull CartItem save(final CartItem cartItem) {
-        cartItem.setId(this.cartItemRepository.getCandidateId());
         return this.cartItemRepository.save(cartItem);
     }
 
@@ -41,7 +37,10 @@ public class CartItemServiceImpl implements CartItemService {
                 this.cartService.preventClosedCartChanges(cart);
                 final Product product = this.productService.getProduct(productId);
                 preventDuplicateCartItem(cart, product);
-                final CartItem cartItem = new CartItem(cart.getId(), quantity, product);
+                final CartItem cartItem = new CartItem();
+                cartItem.setCartId(cart.getId());
+                cartItem.setQuantity(quantity);
+                cartItem.setProduct(product);
                 save(cartItem);
                 cart.getCartItems().add(cartItem);
                 this.cartService.update(cart);

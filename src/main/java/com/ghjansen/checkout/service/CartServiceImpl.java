@@ -11,11 +11,10 @@ import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 
-/**
- * The implementation of the service with synchronization applied when accessing other services
- */
 @Service
 public class CartServiceImpl implements CartService {
 
@@ -33,20 +32,24 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public @NotNull Cart save(final Cart cart) {
-        cart.setId(this.cartRepository.getCandidateId());
         return cartRepository.save(cart);
     }
 
     @Override
     public @NotNull Cart create() {
-        return save(new Cart());
+        Cart cart = new Cart();
+        cart.setDateCreated(ZonedDateTime.now(ZoneId.of("UTC")));
+        cart.setStatus(Cart.Status.open.name());
+        cart.setCartItems(new ArrayList<>());
+        cart.setPromotions(new ArrayList<>());
+        return save(cart);
     }
 
     @Override
     public @NotNull Cart update(Cart cart) {
         synchronized (this.promotionService){
             cart = this.promotionService.applyPromotions(cart);
-            return this.cartRepository.update(cart);
+            return save(cart);
         }
     }
 
@@ -68,7 +71,7 @@ public class CartServiceImpl implements CartService {
             synchronized (this.orderService){
                 createOrderFromCart(cart);
                 cart.setStatus(Cart.Status.closed.name());
-                return this.cartRepository.update(cart);
+                return save(cart);
             }
         }
     }
@@ -77,7 +80,10 @@ public class CartServiceImpl implements CartService {
         Order order = this.orderService.create();
         ArrayList<OrderItem> orderItems = new ArrayList<>();
         for(CartItem cartItem : cart.getCartItems()){
-            OrderItem orderItem = new OrderItem(order.getId(), cartItem.getQuantity(), cartItem.getProduct());
+            OrderItem orderItem = new OrderItem();
+            orderItem.setOrderId(order.getId());
+            orderItem.setQuantity(cartItem.getQuantity());
+            orderItem.setProduct(cartItem.getProduct());
             orderItem = this.orderItemService.save(orderItem);
             orderItems.add(orderItem);
         }
@@ -85,7 +91,7 @@ public class CartServiceImpl implements CartService {
         order.setPromotions(cart.getPromotions());
         order.setTotalPrice(cart.getTotalPrice());
         order.setCartId(cart.getId());
-        this.orderService.update(order);
+        this.orderService.save(order);
     }
 
     @SuppressWarnings("unchecked")

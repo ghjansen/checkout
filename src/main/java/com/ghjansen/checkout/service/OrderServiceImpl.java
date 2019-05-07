@@ -7,10 +7,10 @@ import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
 
-/**
- * The implementation of the service
- */
 @Service
 public class OrderServiceImpl implements OrderService {
 
@@ -22,18 +22,18 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public @NotNull Order save(final Order order) {
-        order.setId(this.orderRepository.getCandidateId());
         return this.orderRepository.save(order);
     }
 
     @Override
     public @NotNull Order create() {
+        Order order = new Order();
+        order.setCartId(0L);
+        order.setDateCreated(ZonedDateTime.now(ZoneId.of("UTC")));
+        order.setOrderItems(new ArrayList<>());
+        order.setPromotions(new ArrayList<>());
+        order.setTotalPrice(0D);
         return save(new Order());
-    }
-
-    @Override
-    public @NotNull Order update(final Order order) {
-        return this.orderRepository.update(order);
     }
 
     @Override

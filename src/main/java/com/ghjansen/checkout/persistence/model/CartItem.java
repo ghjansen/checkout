@@ -1,13 +1,16 @@
 package com.ghjansen.checkout.persistence.model;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 
-/**
- * The entity that holds all information about cart item
- */
-public class CartItem implements Entity {
+@Entity
+public class CartItem extends Promotional {
 
-    @NotNull(message = "Cart item id is required")
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotNull(message = "Cart item cart id is required")
     private Long cartId;
@@ -16,14 +19,8 @@ public class CartItem implements Entity {
     @NotNull(message = "Cart item product is required")
     private Product product;
 
-    public CartItem(@NotNull(message = "Cart item id is required") final Long id, @NotNull(message = "Cart item cart id is required") final Long cartId, @NotNull(message = "Cart item quantity is required") final Long quantity, @NotNull(message = "Cart item product is required") final Product product) {
+    public CartItem(Long id, @NotNull(message = "Cart item cart id is required") Long cartId, @NotNull(message = "Cart item quantity is required") Long quantity, @NotNull(message = "Cart item product is required") Product product) {
         this.id = id;
-        this.cartId = cartId;
-        this.quantity = quantity;
-        this.product = product;
-    }
-
-    public CartItem(@NotNull(message = "Cart item cart id is required") Long cartId, @NotNull(message = "Cart item quantity is required") Long quantity, @NotNull(message = "Cart item product is required") Product product) {
         this.cartId = cartId;
         this.quantity = quantity;
         this.product = product;

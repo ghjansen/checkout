@@ -18,7 +18,7 @@ public class CheckoutConfiguration {
     public ProductRepository productRepository(){
         return new ProductRepository();
     }
-    */
+
     @Bean
     public CartRepository cartRepository() {
         return new CartRepository();
@@ -43,5 +43,6 @@ public class CheckoutConfiguration {
     public OrderItemRepository orderItemRepository(){
         return new OrderItemRepository();
     }
+   */
 
 }

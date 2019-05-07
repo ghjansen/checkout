@@ -3,8 +3,8 @@ package com.ghjansen.checkout.service;
 import com.ghjansen.checkout.api.rest.exception.ResourceNotFoundException;
 import com.ghjansen.checkout.persistence.model.Cart;
 import com.ghjansen.checkout.persistence.model.CartItem;
-import com.ghjansen.checkout.persistence.model.Entity;
 import com.ghjansen.checkout.persistence.model.Promotion;
+import com.ghjansen.checkout.persistence.model.Promotional;
 import com.ghjansen.checkout.persistence.repository.PromotionRepository;
 import org.springframework.stereotype.Service;
 
@@ -14,9 +14,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-/**
- * The implementation of the service
- */
 @Service
 public class PromotionServiceImpl implements PromotionService {
 
@@ -28,7 +25,6 @@ public class PromotionServiceImpl implements PromotionService {
 
     @Override
     public @NotNull Promotion save(final Promotion promotion) {
-        promotion.setId(this.promotionRepository.getCandidateId());
         return this.promotionRepository.save(promotion);
     }
 
@@ -47,14 +43,14 @@ public class PromotionServiceImpl implements PromotionService {
         cart.getPromotions().clear();
         Iterable<Promotion> promotions = getAllPromotions();
         Iterable<CartItem> items = cart.getCartItems();
-        HashMap<Entity,Entity> index = new HashMap<>();
+        HashMap<Promotional,Promotional> index = new HashMap<>();
         for(CartItem c : items){
             index = checkEligibility(c, promotions, index);
         }
         return calculateCartTotalPrice(cart, index);
     }
 
-    private HashMap<Entity,Entity> checkEligibility(CartItem c, Iterable<Promotion> promotions, HashMap<Entity,Entity> index){
+    private HashMap<Promotional,Promotional> checkEligibility(CartItem c, Iterable<Promotion> promotions, HashMap<Promotional,Promotional> index){
         boolean isPromotional = false;
         //if the product in the item cart IS EQUALS TO the product of a promotion, account it as promotional item
         for(Promotion p : promotions){
@@ -71,7 +67,7 @@ public class PromotionServiceImpl implements PromotionService {
         return index;
     }
 
-    private Cart calculateCartTotalPrice(Cart cart, HashMap<Entity,Entity> index){
+    private Cart calculateCartTotalPrice(Cart cart, HashMap<Promotional,Promotional> index){
         Double totalPrice = 0D;
         Iterator it = index.entrySet().iterator();
         while(it.hasNext()){

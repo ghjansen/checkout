@@ -1,19 +1,25 @@
 package com.ghjansen.checkout.persistence.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * The entity that holds all information about cart
- */
-public class Cart implements Entity {
+@Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property="id")
+public class Cart {
 
-    @NotNull(message = "Cart id is required")
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotNull(message = "Cart date created is required")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.SSS z")
@@ -27,6 +33,20 @@ public class Cart implements Entity {
     @NotNull(message = "Cart total price is required")
     private Double totalPrice;
 
+    public Cart(Long id, @NotNull(message = "Cart date created is required") ZonedDateTime dateCreated, @NotNull(message = "Cart status is required") String status, @NotNull(message = "Cart items is required") List<CartItem> cartItems, @NotNull(message = "Cart promotions is required") List<Promotion> promotions, @NotNull(message = "Cart total price is required") Double totalPrice) {
+        this.id = id;
+        this.dateCreated = dateCreated;
+        this.status = status;
+        this.cartItems = cartItems;
+        this.promotions = promotions;
+        this.totalPrice = totalPrice;
+    }
+
+    public Cart() {
+
+    }
+
+    /*
     public Cart() {
         this.dateCreated = ZonedDateTime.now(ZoneId.of("UTC"));
         this.status = Status.open.name();
@@ -34,6 +54,7 @@ public class Cart implements Entity {
         this.promotions = new ArrayList<>();
         this.totalPrice = 0D;
     }
+    */
 
     public Long getId() {
         return id;
