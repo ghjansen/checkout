@@ -4,6 +4,7 @@ import com.ghjansen.checkout.api.rest.exception.ResourceNotFoundException;
 import com.ghjansen.checkout.persistence.model.Order;
 import com.ghjansen.checkout.persistence.repository.OrderRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -12,6 +13,7 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 
 @Service
+@Transactional
 public class OrderServiceImpl implements OrderService {
 
     private OrderRepository orderRepository;

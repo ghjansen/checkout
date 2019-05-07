@@ -20,16 +20,12 @@ public class PromotionController {
     }
 
     @GetMapping(value = {""})
-    public @NotNull Iterable<Promotion> getPromotions(){
-        synchronized (this.promotionService){
-            return this.promotionService.getAllPromotions();
-        }
+    public @NotNull Iterable<Promotion> getPromotions() {
+        return this.promotionService.getAllPromotions();
     }
 
     @GetMapping(value = {"/{id}"})
-    public @NotNull Promotion getPromotion(@PathVariable("id") Long id){
-        synchronized (this.promotionService){
-            return this.promotionService.getPromotion(id);
-        }
+    public @NotNull Promotion getPromotion(@PathVariable("id") Long id) {
+        return this.promotionService.getPromotion(id);
     }
 }

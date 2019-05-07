@@ -18,31 +18,23 @@ public class CartItemController {
     }
 
     @GetMapping(value = {""})
-    public @NotNull Iterable<CartItem> getCartItems(){
-        synchronized (this.cartItemService){
-            return this.cartItemService.getAllCartItems();
-        }
+    public @NotNull Iterable<CartItem> getCartItems() {
+        return this.cartItemService.getAllCartItems();
 
     }
 
     @PostMapping(value = {""})
-    public @NotNull CartItem createCartItem(@RequestParam(value="cartId", defaultValue="") Long cartId, @RequestParam(value="quantity", defaultValue="1") Long quantity, @NotEmpty @RequestParam(value="productId") Long productId){
-        synchronized (this.cartItemService){
-            return this.cartItemService.create(cartId, quantity, productId);
-        }
+    public @NotNull CartItem createCartItem(@RequestParam(value = "cartId", defaultValue = "") Long cartId, @RequestParam(value = "quantity", defaultValue = "1") Long quantity, @NotEmpty @RequestParam(value = "productId") Long productId) {
+        return this.cartItemService.create(cartId, quantity, productId);
     }
 
     @GetMapping(value = {"/{id}"})
-    public @NotNull CartItem getCartItem(@PathVariable("id") Long id){
-        synchronized (this.cartItemService){
-            return this.cartItemService.getCartItem(id);
-        }
+    public @NotNull CartItem getCartItem(@PathVariable("id") Long id) {
+        return this.cartItemService.getCartItem(id);
     }
 
     @DeleteMapping(value = {"/{id}"})
-    public void deleteCartItem(@PathVariable("id") Long id){
-        synchronized (this.cartItemService){
-            this.cartItemService.removeCartItem(id);
-        }
+    public void deleteCartItem(@PathVariable("id") Long id) {
+        this.cartItemService.removeCartItem(id);
     }
 }

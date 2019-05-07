@@ -26,7 +26,7 @@ public class OrderItem {
         this.product = product;
     }
 
-    public OrderItem(){
+    public OrderItem() {
 
     }
 

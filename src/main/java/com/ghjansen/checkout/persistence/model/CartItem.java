@@ -26,7 +26,7 @@ public class CartItem extends Promotional {
         this.product = product;
     }
 
-    public CartItem(){
+    public CartItem() {
 
     }
 

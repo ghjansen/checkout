@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property="id")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Cart {
 
     @Id
@@ -45,16 +45,6 @@ public class Cart {
     public Cart() {
 
     }
-
-    /*
-    public Cart() {
-        this.dateCreated = ZonedDateTime.now(ZoneId.of("UTC"));
-        this.status = Status.open.name();
-        this.cartItems = new ArrayList<>();
-        this.promotions = new ArrayList<>();
-        this.totalPrice = 0D;
-    }
-    */
 
     public Long getId() {
         return id;

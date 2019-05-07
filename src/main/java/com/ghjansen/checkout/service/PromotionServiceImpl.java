@@ -7,6 +7,7 @@ import com.ghjansen.checkout.persistence.model.Promotion;
 import com.ghjansen.checkout.persistence.model.Promotional;
 import com.ghjansen.checkout.persistence.repository.PromotionRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -15,6 +16,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 @Service
+@Transactional
 public class PromotionServiceImpl implements PromotionService {
 
     private PromotionRepository promotionRepository;
@@ -43,41 +45,41 @@ public class PromotionServiceImpl implements PromotionService {
         cart.getPromotions().clear();
         Iterable<Promotion> promotions = getAllPromotions();
         Iterable<CartItem> items = cart.getCartItems();
-        HashMap<Promotional,Promotional> index = new HashMap<>();
-        for(CartItem c : items){
+        HashMap<Promotional, Promotional> index = new HashMap<>();
+        for (CartItem c : items) {
             index = checkEligibility(c, promotions, index);
         }
         return calculateCartTotalPrice(cart, index);
     }
 
-    private HashMap<Promotional,Promotional> checkEligibility(CartItem c, Iterable<Promotion> promotions, HashMap<Promotional,Promotional> index){
+    private HashMap<Promotional, Promotional> checkEligibility(CartItem c, Iterable<Promotion> promotions, HashMap<Promotional, Promotional> index) {
         boolean isPromotional = false;
         //if the product in the item cart IS EQUALS TO the product of a promotion, account it as promotional item
-        for(Promotion p : promotions){
-            if(c.getProduct().getId().equals(p.getProductId()) && c.getQuantity() >= p.getItemQuantity()){
+        for (Promotion p : promotions) {
+            if (c.getProduct().getId().equals(p.getProductId()) && c.getQuantity() >= p.getItemQuantity()) {
                 isPromotional = true;
                 index.put(p, c);
                 break;
             }
         }
         //if the product in the item cart IS NOT EQUALS TO the product of the promotion, account it as a regular item
-        if(!isPromotional){
+        if (!isPromotional) {
             index.put(c, c);
         }
         return index;
     }
 
-    private Cart calculateCartTotalPrice(Cart cart, HashMap<Promotional,Promotional> index){
+    private Cart calculateCartTotalPrice(Cart cart, HashMap<Promotional, Promotional> index) {
         Double totalPrice = 0D;
         Iterator it = index.entrySet().iterator();
-        while(it.hasNext()){
+        while (it.hasNext()) {
             Map.Entry pair = (Map.Entry) it.next();
             CartItem i = (CartItem) pair.getValue();
-            if(pair.getKey().getClass().equals(Promotion.class)){
+            if (pair.getKey().getClass().equals(Promotion.class)) {
                 Promotion p = (Promotion) pair.getKey();
                 cart.getPromotions().add(p);
                 totalPrice += calculatePromotionalItem(p, i);
-            } else if (pair.getKey().getClass().equals(CartItem.class)){
+            } else if (pair.getKey().getClass().equals(CartItem.class)) {
                 totalPrice += calculateRegularItem(i);
             }
         }
@@ -85,11 +87,11 @@ public class PromotionServiceImpl implements PromotionService {
         return cart;
     }
 
-    private Double calculatePromotionalItem(Promotion p, CartItem i){
+    private Double calculatePromotionalItem(Promotion p, CartItem i) {
         Double price = 0D;
-        if(p.getGroupedItemQuantityProgression()){
+        if (p.getGroupedItemQuantityProgression()) {
             int skip = 0;
-            while((i.getQuantity() - skip) % p.getItemQuantity() != 0) skip ++;
+            while ((i.getQuantity() - skip) % p.getItemQuantity() != 0) skip++;
             Double productRegularPrice = i.getProduct().getValue();
             Double productPromotionalPrice = productRegularPrice * p.getDiscountFactor();
             price = productPromotionalPrice * (i.getQuantity() - skip);
@@ -103,7 +105,7 @@ public class PromotionServiceImpl implements PromotionService {
         return price;
     }
 
-    private Double calculateRegularItem(CartItem i){
+    private Double calculateRegularItem(CartItem i) {
         return i.getQuantity() * i.getProduct().getValue();
     }
 }

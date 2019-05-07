@@ -20,16 +20,12 @@ public class OrderItemController {
     }
 
     @GetMapping(value = {""})
-    public @NotNull Iterable<OrderItem> getOrderItems(){
-        synchronized (this.orderItemService){
-            return this.orderItemService.getAllOrderItems();
-        }
+    public @NotNull Iterable<OrderItem> getOrderItems() {
+        return this.orderItemService.getAllOrderItems();
     }
 
     @GetMapping(value = {"/{id}"})
-    public @NotNull OrderItem getOrderItem(@PathVariable("id") Long id){
-        synchronized (this.orderItemService){
-            return this.orderItemService.getOrderItem(id);
-        }
+    public @NotNull OrderItem getOrderItem(@PathVariable("id") Long id) {
+        return this.orderItemService.getOrderItem(id);
     }
 }

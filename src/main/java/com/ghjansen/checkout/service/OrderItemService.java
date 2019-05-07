@@ -10,6 +10,8 @@ import javax.validation.constraints.NotNull;
 public interface OrderItemService {
 
     @NotNull OrderItem save(final OrderItem orderItem);
+
     @NotNull OrderItem getOrderItem(@Min(value = 1L, message = "Invalid product id") final Long id);
+
     @NotNull Iterable<OrderItem> getAllOrderItems();
 }

@@ -11,7 +11,9 @@ import javax.validation.constraints.NotNull;
 public interface ProductService {
 
     @NotNull Product save(final Product product);
+
     @NotNull Product getProduct(@Min(value = 1L, message = "Invalid product id") final Long id);
+
     @NotNull Iterable<Product> getAllProducts();
 
 }

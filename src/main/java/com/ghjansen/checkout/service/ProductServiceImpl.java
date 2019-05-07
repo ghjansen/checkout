@@ -4,11 +4,13 @@ import com.ghjansen.checkout.api.rest.exception.ResourceNotFoundException;
 import com.ghjansen.checkout.persistence.model.Product;
 import com.ghjansen.checkout.persistence.repository.ProductRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 @Service
+@Transactional
 public class ProductServiceImpl implements ProductService {
 
     private ProductRepository productRepository;

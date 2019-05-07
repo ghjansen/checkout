@@ -13,7 +13,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "orders")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property="id")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Order {
 
     @Id
@@ -42,16 +42,6 @@ public class Order {
 
     public Order() {
     }
-
-    /*
-    public Order(){
-        this.cartId = 0L;
-        this.dateCreated = ZonedDateTime.now(ZoneId.of("UTC"));
-        this.orderItems = new ArrayList<>();
-        this.promotions = new ArrayList<>();
-        this.totalPrice = 0D;
-    }
-    */
 
     public Long getId() {
         return id;

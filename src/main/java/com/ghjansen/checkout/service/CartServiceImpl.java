@@ -8,6 +8,7 @@ import com.ghjansen.checkout.persistence.model.Order;
 import com.ghjansen.checkout.persistence.model.OrderItem;
 import com.ghjansen.checkout.persistence.repository.CartRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -16,6 +17,7 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 
 @Service
+@Transactional
 public class CartServiceImpl implements CartService {
 
     private CartRepository cartRepository;
@@ -47,10 +49,8 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public @NotNull Cart update(Cart cart) {
-        synchronized (this.promotionService){
-            cart = this.promotionService.applyPromotions(cart);
-            return save(cart);
-        }
+        cart = this.promotionService.applyPromotions(cart);
+        return save(cart);
     }
 
     @Override
@@ -67,19 +67,15 @@ public class CartServiceImpl implements CartService {
     public @NotNull Cart closeCart(@Min(value = 1L, message = "Ivalid cart id") final Long id) {
         Cart cart = getCart(id);
         preventClosedCartChanges(cart);
-        synchronized (this.orderItemService){
-            synchronized (this.orderService){
-                createOrderFromCart(cart);
-                cart.setStatus(Cart.Status.closed.name());
-                return save(cart);
-            }
-        }
+        createOrderFromCart(cart);
+        cart.setStatus(Cart.Status.closed.name());
+        return save(cart);
     }
 
-    private void createOrderFromCart(Cart cart){
+    private void createOrderFromCart(Cart cart) {
         Order order = this.orderService.create();
         ArrayList<OrderItem> orderItems = new ArrayList<>();
-        for(CartItem cartItem : cart.getCartItems()){
+        for (CartItem cartItem : cart.getCartItems()) {
             OrderItem orderItem = new OrderItem();
             orderItem.setOrderId(order.getId());
             orderItem.setQuantity(cartItem.getQuantity());
@@ -96,7 +92,7 @@ public class CartServiceImpl implements CartService {
 
     @SuppressWarnings("unchecked")
     public <X extends Throwable> void preventClosedCartChanges(Cart c) throws X {
-        if(c.getStatus().equals(Cart.Status.closed.name())){
+        if (c.getStatus().equals(Cart.Status.closed.name())) {
             throw (X) new InvalidStateException("Cart " +
                     c.getId() + " was already closed. Requested operation rejected");
         }
