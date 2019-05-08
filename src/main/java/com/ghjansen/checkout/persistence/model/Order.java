@@ -27,16 +27,16 @@ public class Order {
     @NotNull(message = "Order items is required")
     private List<OrderItem> orderItems;
     @NotNull(message = "Order promotions is required")
-    private List<Promotion> promotions;
+    private List<OrderPromotion> orderPromotions;
     @NotNull(message = "Order total price is required")
     private Double totalPrice;
 
-    public Order(Long id, @NotNull(message = "Order cart id is required") Long cartId, @NotNull(message = "Order date created is required") ZonedDateTime dateCreated, @NotNull(message = "Order items is required") List<OrderItem> orderItems, @NotNull(message = "Order promotions is required") List<Promotion> promotions, @NotNull(message = "Order total price is required") Double totalPrice) {
+    public Order(Long id, @NotNull(message = "Order cart id is required") Long cartId, @NotNull(message = "Order date created is required") ZonedDateTime dateCreated, @NotNull(message = "Order items is required") List<OrderItem> orderItems, @NotNull(message = "Order promotions is required") List<OrderPromotion> orderPromotions, @NotNull(message = "Order total price is required") Double totalPrice) {
         this.id = id;
         this.cartId = cartId;
         this.dateCreated = dateCreated;
         this.orderItems = orderItems;
-        this.promotions = promotions;
+        this.orderPromotions = orderPromotions;
         this.totalPrice = totalPrice;
     }
 
@@ -75,12 +75,12 @@ public class Order {
         this.orderItems = orderItems;
     }
 
-    public List<Promotion> getPromotions() {
-        return promotions;
+    public List<OrderPromotion> getOrderPromotions() {
+        return orderPromotions;
     }
 
-    public void setPromotions(final List<Promotion> promotions) {
-        this.promotions = promotions;
+    public void setOrderPromotions(List<OrderPromotion> orderPromotions) {
+        this.orderPromotions = orderPromotions;
     }
 
     public Double getTotalPrice() {

@@ -27,17 +27,18 @@ public class Cart {
     @OneToMany(mappedBy = "pk.cart")
     @Valid
     private List<CartItem> cartItems;
-    @NotNull(message = "Cart promotions is required")
-    private List<Promotion> promotions;
+    @OneToMany(mappedBy = "pk.cart")
+    @Valid
+    private List<CartPromotion> cartPromotions;
     @NotNull(message = "Cart total price is required")
     private Double totalPrice;
 
-    public Cart(Long id, @NotNull(message = "Cart date created is required") ZonedDateTime dateCreated, @NotNull(message = "Cart status is required") String status, @Valid List<CartItem> cartItems, @NotNull(message = "Cart promotions is required") List<Promotion> promotions, @NotNull(message = "Cart total price is required") Double totalPrice) {
+    public Cart(Long id, @NotNull(message = "Cart date created is required") ZonedDateTime dateCreated, @NotNull(message = "Cart status is required") String status, @Valid List<CartItem> cartItems, @Valid List<CartPromotion> cartPromotions, @NotNull(message = "Cart total price is required") Double totalPrice) {
         this.id = id;
         this.dateCreated = dateCreated;
         this.status = status;
         this.cartItems = cartItems;
-        this.promotions = promotions;
+        this.cartPromotions = cartPromotions;
         this.totalPrice = totalPrice;
     }
 
@@ -77,12 +78,12 @@ public class Cart {
         this.cartItems = cartItems;
     }
 
-    public List<Promotion> getPromotions() {
-        return promotions;
+    public List<CartPromotion> getCartPromotions() {
+        return cartPromotions;
     }
 
-    public void setPromotions(final List<Promotion> promotions) {
-        this.promotions = promotions;
+    public void setCartPromotions(List<CartPromotion> cartPromotions) {
+        this.cartPromotions = cartPromotions;
     }
 
     public Double getTotalPrice() {

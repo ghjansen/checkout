@@ -2,10 +2,7 @@ package com.ghjansen.checkout.service;
 
 import com.ghjansen.checkout.api.rest.exception.InvalidStateException;
 import com.ghjansen.checkout.api.rest.exception.ResourceNotFoundException;
-import com.ghjansen.checkout.persistence.model.Cart;
-import com.ghjansen.checkout.persistence.model.CartItem;
-import com.ghjansen.checkout.persistence.model.Order;
-import com.ghjansen.checkout.persistence.model.OrderItem;
+import com.ghjansen.checkout.persistence.model.*;
 import com.ghjansen.checkout.persistence.repository.CartRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,7 +40,7 @@ public class CartServiceImpl implements CartService {
         cart.setDateCreated(ZonedDateTime.now(ZoneId.of("UTC")));
         cart.setStatus(Cart.Status.open.name());
         cart.setCartItems(new ArrayList<>());
-        cart.setPromotions(new ArrayList<>());
+        cart.setCartPromotions(new ArrayList<>());
         return save(cart);
     }
 
@@ -84,7 +81,12 @@ public class CartServiceImpl implements CartService {
             orderItems.add(orderItem);
         }
         order.setOrderItems(orderItems);
-        order.setPromotions(cart.getPromotions());
+        ArrayList<OrderPromotion> orderPromotions = new ArrayList<>();
+        for(CartPromotion cp : cart.getCartPromotions()){
+            OrderPromotion op = new OrderPromotion(order, cp.getPromotion());
+            orderPromotions.add(op);
+        }
+        order.setOrderPromotions(orderPromotions);
         order.setTotalPrice(cart.getTotalPrice());
         order.setCartId(cart.getId());
         this.orderService.save(order);

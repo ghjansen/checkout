@@ -33,7 +33,7 @@ public class OrderServiceImpl implements OrderService {
         order.setCartId(0L);
         order.setDateCreated(ZonedDateTime.now(ZoneId.of("UTC")));
         order.setOrderItems(new ArrayList<>());
-        order.setPromotions(new ArrayList<>());
+        order.setOrderPromotions(new ArrayList<>());
         order.setTotalPrice(0D);
         return save(new Order());
     }
