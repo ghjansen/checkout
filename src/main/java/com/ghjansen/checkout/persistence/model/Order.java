@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -24,14 +25,16 @@ public class Order {
     @NotNull(message = "Order date created is required")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.SSS z")
     private ZonedDateTime dateCreated;
-    @NotNull(message = "Order items is required")
+    @OneToMany(mappedBy = "pk.order")
+    @Valid
     private List<OrderItem> orderItems;
-    @NotNull(message = "Order promotions is required")
+    @OneToMany(mappedBy = "pk.order")
+    @Valid
     private List<OrderPromotion> orderPromotions;
     @NotNull(message = "Order total price is required")
     private Double totalPrice;
 
-    public Order(Long id, @NotNull(message = "Order cart id is required") Long cartId, @NotNull(message = "Order date created is required") ZonedDateTime dateCreated, @NotNull(message = "Order items is required") List<OrderItem> orderItems, @NotNull(message = "Order promotions is required") List<OrderPromotion> orderPromotions, @NotNull(message = "Order total price is required") Double totalPrice) {
+    public Order(Long id, @NotNull(message = "Order cart id is required") Long cartId, @NotNull(message = "Order date created is required") ZonedDateTime dateCreated, @Valid List<OrderItem> orderItems, @Valid List<OrderPromotion> orderPromotions, @NotNull(message = "Order total price is required") Double totalPrice) {
         this.id = id;
         this.cartId = cartId;
         this.dateCreated = dateCreated;

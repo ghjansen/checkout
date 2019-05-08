@@ -41,6 +41,7 @@ public class CartServiceImpl implements CartService {
         cart.setStatus(Cart.Status.open.name());
         cart.setCartItems(new ArrayList<>());
         cart.setCartPromotions(new ArrayList<>());
+        cart.setTotalPrice(0D);
         return save(cart);
     }
 
@@ -73,10 +74,7 @@ public class CartServiceImpl implements CartService {
         Order order = this.orderService.create();
         ArrayList<OrderItem> orderItems = new ArrayList<>();
         for (CartItem cartItem : cart.getCartItems()) {
-            OrderItem orderItem = new OrderItem();
-            orderItem.setOrderId(order.getId());
-            orderItem.setQuantity(cartItem.getQuantity());
-            orderItem.setProduct(cartItem.getProduct());
+            OrderItem orderItem = new OrderItem(order, cartItem.getProduct(), cartItem.getQuantity());
             orderItem = this.orderItemService.save(orderItem);
             orderItems.add(orderItem);
         }
