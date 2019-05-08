@@ -4,10 +4,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -26,14 +24,15 @@ public class Cart {
     private ZonedDateTime dateCreated;
     @NotNull(message = "Cart status is required")
     private String status;
-    @NotNull(message = "Cart items is required")
+    @OneToMany(mappedBy = "pk.cart")
+    @Valid
     private List<CartItem> cartItems;
     @NotNull(message = "Cart promotions is required")
     private List<Promotion> promotions;
     @NotNull(message = "Cart total price is required")
     private Double totalPrice;
 
-    public Cart(Long id, @NotNull(message = "Cart date created is required") ZonedDateTime dateCreated, @NotNull(message = "Cart status is required") String status, @NotNull(message = "Cart items is required") List<CartItem> cartItems, @NotNull(message = "Cart promotions is required") List<Promotion> promotions, @NotNull(message = "Cart total price is required") Double totalPrice) {
+    public Cart(Long id, @NotNull(message = "Cart date created is required") ZonedDateTime dateCreated, @NotNull(message = "Cart status is required") String status, @Valid List<CartItem> cartItems, @NotNull(message = "Cart promotions is required") List<Promotion> promotions, @NotNull(message = "Cart total price is required") Double totalPrice) {
         this.id = id;
         this.dateCreated = dateCreated;
         this.status = status;

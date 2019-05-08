@@ -37,10 +37,7 @@ public class CartItemServiceImpl implements CartItemService {
         this.cartService.preventClosedCartChanges(cart);
         final Product product = this.productService.getProduct(productId);
         preventDuplicateCartItem(cart, product);
-        final CartItem cartItem = new CartItem();
-        cartItem.setCartId(cart.getId());
-        cartItem.setQuantity(quantity);
-        cartItem.setProduct(product);
+        final CartItem cartItem = new CartItem(cart, product, quantity);
         save(cartItem);
         cart.getCartItems().add(cartItem);
         this.cartService.update(cart);
@@ -60,7 +57,7 @@ public class CartItemServiceImpl implements CartItemService {
     @Override
     public void removeCartItem(@Min(value = 1L, message = "Ivalid cart item id") final Long id) {
         final CartItem cartItem = getCartItem(id);
-        final Cart cart = this.cartService.getCart(cartItem.getCartId());
+        final Cart cart = cartItem.getCart();
         this.cartService.preventClosedCartChanges(cart);
         cart.getCartItems().remove(cartItem);
         this.cartService.update(cart);
@@ -81,8 +78,7 @@ public class CartItemServiceImpl implements CartItemService {
             if (i.getProduct().getId().equals(p.getId())) {
                 throw (X) new InvalidStateException("The product " +
                         p.getId() + " was already included in the cart " +
-                        c.getId() + " through the cart item " +
-                        i.getId());
+                        c.getId());
             }
         }
     }
