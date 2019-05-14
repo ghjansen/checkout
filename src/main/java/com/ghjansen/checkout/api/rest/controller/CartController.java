@@ -6,9 +6,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
 
-/**
- * The cart controller that handles REST requests
- */
 @RestController
 @RequestMapping("/api/carts")
 public class CartController {
@@ -20,31 +17,23 @@ public class CartController {
     }
 
     @GetMapping(value = {""})
-    public @NotNull Iterable<Cart> getCarts(){
-        synchronized (this.cartService){
-            return this.cartService.getAllCarts();
-        }
+    public @NotNull Iterable<Cart> getCarts() {
+        return this.cartService.getAllCarts();
     }
 
     @PostMapping(value = {""})
-    public @NotNull Cart createCart(){
-        synchronized (this.cartService){
-            return this.cartService.create();
-        }
+    public @NotNull Cart createCart() {
+        return this.cartService.create();
     }
 
     @GetMapping(value = {"/{id}"})
-    public @NotNull Cart getCart(@PathVariable("id") Long id){
-        synchronized (this.cartService){
-            return this.cartService.getCart(id);
-        }
+    public @NotNull Cart getCart(@PathVariable("id") Long id) {
+        return this.cartService.getCart(id);
     }
 
     @PostMapping(value = {"/{id}"})
-    public @NotNull Cart closeCart(@PathVariable("id") Long id){
-        synchronized (this.cartService){
-            return this.cartService.closeCart(id);
-        }
+    public @NotNull Cart closeCart(@PathVariable("id") Long id) {
+        return this.cartService.closeCart(id);
     }
 
 }

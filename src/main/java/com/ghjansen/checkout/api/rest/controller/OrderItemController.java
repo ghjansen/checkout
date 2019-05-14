@@ -2,16 +2,12 @@ package com.ghjansen.checkout.api.rest.controller;
 
 import com.ghjansen.checkout.persistence.model.OrderItem;
 import com.ghjansen.checkout.service.OrderItemService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 
-/**
- * The order item controller that handles REST requests
- */
 @RestController
 @RequestMapping("/api/orderitems")
 public class OrderItemController {
@@ -23,16 +19,25 @@ public class OrderItemController {
     }
 
     @GetMapping(value = {""})
-    public @NotNull Iterable<OrderItem> getOrderItems(){
-        synchronized (this.orderItemService){
-            return this.orderItemService.getAllOrderItems();
+    public @NotNull Iterable<OrderItem> getOrderItemOrList(@RequestParam(value = "orderId", defaultValue = "", required = false) Long orderId, @RequestParam(value = "productId", defaultValue = "", required = false) Long productId) {
+        if (orderId != null && productId != null && orderId > 0 && productId > 0) {
+            return listOf(getOrderItem(orderId, productId));
+        } else {
+            return getOrderItems();
         }
     }
 
-    @GetMapping(value = {"/{id}"})
-    public @NotNull OrderItem getOrderItem(@PathVariable("id") Long id){
-        synchronized (this.orderItemService){
-            return this.orderItemService.getOrderItem(id);
-        }
+    public Iterable<OrderItem> getOrderItems() {
+        return this.orderItemService.getAllOrderItems();
+    }
+
+    public OrderItem getOrderItem(Long orderId, Long productId) {
+        return this.orderItemService.getOrderItem(orderId, productId);
+    }
+
+    private Iterable<OrderItem> listOf(OrderItem item) {
+        ArrayList<OrderItem> list = new ArrayList<>();
+        list.add(item);
+        return list;
     }
 }

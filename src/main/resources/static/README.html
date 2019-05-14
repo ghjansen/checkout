@@ -28,8 +28,8 @@ code {
 </head>
 <body><h1>Checkout System</h1>
 <p>Welcome to the <strong>Checkout System</strong>!</p>
-<p>This is an experimental implementation of a checkout system, as part of a online store. This system was developed using Spring Boot and a synchronized strategy for the emulation of persistence in memory.</p>
-<p>Current supported main features are: create a new cart, add items to the cart, remove items from the cart and close the cart placing a new order. All these operations are supported through the RESTful web service.</p>
+<p>This is an experimental implementation of a checkout system, as part of a online store. This system was created using Spring Boot, Spring Data (JPA) with underlying support of Hibernate as ORM framework for persistence in a embedded H2 database.</p>
+<p>The current supported features are: create a new cart, add items to the cart, remove items from the cart and close the cart placing a new order. All these operations are supported through the RESTful web service.</p>
 <h2>How to use</h2>
 <p>The table below shows the REST API specification, followed by few examples on how to use some of the features.</p>
 <table>
@@ -46,12 +46,12 @@ code {
 <tr><td><code>/api/carts/{id}</code> </td><td> <code>POST</code> </td><td> Close cart and place order </td><td> A cart </td><td> <code>id</code>*</td></tr>
 <tr><td><code>/api/cartitems</code> </td><td> <code>GET</code> </td><td> N/A </td><td> List of cart items </td><td> N/A</td></tr>
 <tr><td><code>/api/cartitems</code> </td><td> <code>POST</code> </td><td> Create new cart item and add it to the informed cart; if <code>cartId</code> omitted, create new cart and add the new cart item to it </td><td> A cart item </td><td> <code>cartId</code>, <code>quantity</code>, <code>productId</code>*</td></tr>
-<tr><td><code>/api/cartitems/{id}</code> </td><td> <code>GET</code> </td><td> N/A </td><td> A cart item </td><td> <code>id</code>*</td></tr>
-<tr><td><code>/api/cartitems/{id}</code> </td><td> <code>DELETE</code> </td><td> Remove cart item </td><td> N/A </td><td> <code>id</code>*</td></tr>
+<tr><td><code>/api/cartitems</code> </td><td> <code>GET</code> </td><td> N/A </td><td> A cart item </td><td> <code>cartId</code>* , <code>productId</code>*</td></tr>
+<tr><td><code>/api/cartitems</code> </td><td> <code>DELETE</code> </td><td> Remove cart item </td><td> N/A </td><td> <code>cartId</code>* , <code>productId</code>*</td></tr>
 <tr><td><code>/api/orders</code> </td><td> <code>GET</code> </td><td> N/A </td><td> List of orders </td><td> N/A</td></tr>
 <tr><td><code>/api/orders/{id}</code> </td><td> <code>GET</code> </td><td> N/A </td><td> A order </td><td> <code>id</code>*</td></tr>
 <tr><td><code>/api/orderitems</code> </td><td> <code>GET</code> </td><td> N/A </td><td> List of order items </td><td> N/A</td></tr>
-<tr><td><code>/api/orderitems/{id}</code> </td><td> <code>GET</code> </td><td> N/A </td><td> A order item </td><td> <code>id</code>*</td></tr>
+<tr><td><code>/api/orderitems</code> </td><td> <code>GET</code> </td><td> N/A </td><td> A order item </td><td> <code>orderId</code>* , <code>productId</code>*</td></tr>
 <tr><td><code>/api/promotions</code> </td><td> <code>GET</code> </td><td> N/A </td><td> List of promotions </td><td> N/A</td></tr>
 <tr><td><code>/api/promotions/{id}</code> </td><td> <code>GET</code> </td><td> N/A </td><td> A promotion </td><td> <code>id</code>*</td></tr>
 </tbody>
@@ -64,7 +64,7 @@ code {
 <li>Add a item to cart <code>1</code> with <code>3</code> units of product <code>2</code><p> <code>$ curl -X POST http://localhost:8080/api/cartitems -d &quot;cartId=1&quot; -d &quot;quantity=3&quot; -d &quot;productId=2&quot;</code></li>
 <li>Create a new cart adding a item to this cart with <code>2</code> units of product <code>1</code><p> <code>$ curl -X POST http://localhost:8080/api/cartitems -d &quot;quantity=2&quot; -d &quot;productId=1&quot;</code></li>
 <li>List all cart items<p> <code>$ curl -X GET http://localhost:8080/api/cartitems</code></li>
-<li>Remove cart item <code>2</code><p> <code>$ curl -X DELETE http://localhost:8080/api/cartitems/2</code></li>
+<li>Remove cart item <code>2</code><p> <code>$ curl -X DELETE &quot;http://localhost:8080/api/cartitems?cartId=2&amp;productId=1&quot;</code></li>
 <li>List all carts<p> <code>$ curl -X GET http://localhost:8080/api/carts</code></li>
 <li>Close cart <code>1</code> and place an order for it<p> <code>$ curl -X POST http://localhost:8080/api/carts/1</code></li>
 <li>List all orders<p> <code>$ curl -X GET http://localhost:8080/api/orders</code></li>
@@ -78,13 +78,13 @@ code {
 <ol>
 <li>Make sure that the property <code>packing.type</code> is with the value <code>jar</code> in the <code>pom.xml</code> file<p> <code>... &lt;packing.type&gt;jar&lt;/packing.type&gt; ...</code></li>
 <li>Run the following Maven command from the project folder<p> <code>mvn clean install</code></li>
-<li>Run the following Java command from the project folder<p> <code>java -jar target/checkout-1.0.0-SNAPSHOT.jar</code></li>
+<li>Run the following Java command from the project folder<p> <code>java -jar target/checkout-2.0.0-SNAPSHOT.jar</code></li>
 </ol>
 <h3>Running from executable war file</h3>
 <ol>
 <li>Make sure that the property <code>packing.type</code> is with the value <code>war</code> in the <code>pom.xml</code> file<p> <code>... &lt;packing.type&gt;war&lt;/packing.type&gt; ...</code></li>
 <li>Run the following Maven command from the project folder<p> <code>mvn clean install</code></li>
-<li>Run the following Java command from the project folder<p> <code>java -jar target/checkout-1.0.0-SNAPSHOT.war</code></li>
+<li>Run the following Java command from the project folder<p> <code>java -jar target/checkout-2.0.0-SNAPSHOT.war</code></li>
 </ol>
 </body>
 </html>

@@ -1,9 +1,9 @@
 # Checkout System
 Welcome to the **Checkout System**!
 
-This is an experimental implementation of a checkout system, as part of a online store. This system was developed using Spring Boot and a synchronized strategy for the emulation of persistence in memory.
+This is an experimental implementation of a checkout system, as part of a online store. This system was created using Spring Boot, Spring Data (JPA) with underlying support of Hibernate as ORM framework for persistence in a embedded H2 database.
 
-Current supported main features are: create a new cart, add items to the cart, remove items from the cart and close the cart placing a new order. All these operations are supported through the RESTful web service.
+The current supported features are: create a new cart, add items to the cart, remove items from the cart and close the cart placing a new order. All these operations are supported through the RESTful web service.
 
 ## How to use
 The table below shows the REST API specification, followed by few examples on how to use some of the features.
@@ -13,19 +13,19 @@ Path | Method | Action | Return | Parameters
 -----|--------|--------|--------|-----------
 `/`| `GET` | N/A | Index page (this page) | N/A
 `/api/products` | `GET` | N/A | List of products | N/A
-`/api/products/{id}` | `GET` | N/A | A product | `id`*
+`/api/products/{id}` | `GET` | N/A | A product | `id`\*
 `/api/carts` | `GET` | N/A | List of carts | N/A
 `/api/carts` | `POST` | Create a new cart | A cart | N/A
-`/api/carts/{id}` | `GET` | N/A | A cart | `id`*
-`/api/carts/{id}` | `POST` | Close cart and place order | A cart | `id`*
+`/api/carts/{id}` | `GET` | N/A | A cart | `id`\*
+`/api/carts/{id}` | `POST` | Close cart and place order | A cart | `id`\*
 `/api/cartitems` | `GET` | N/A | List of cart items | N/A
-`/api/cartitems` | `POST` | Create new cart item and add it to the informed cart; if `cartId` omitted, create new cart and add the new cart item to it | A cart item | `cartId`, `quantity`, `productId`*
-`/api/cartitems/{id}` | `GET` | N/A | A cart item | `id`*
-`/api/cartitems/{id}` | `DELETE` | Remove cart item | N/A | `id`*
+`/api/cartitems` | `POST` | Create new cart item and add it to the informed cart; if `cartId` omitted, create new cart and add the new cart item to it | A cart item | `cartId`, `quantity`, `productId`\*
+`/api/cartitems` | `GET` | N/A | A cart item | `cartId`\* , `productId`\*
+`/api/cartitems` | `DELETE` | Remove cart item | N/A | `cartId`\* , `productId`\*
 `/api/orders` | `GET` | N/A | List of orders | N/A
-`/api/orders/{id}` | `GET` | N/A | A order | `id`*
+`/api/orders/{id}` | `GET` | N/A | A order | `id`\*
 `/api/orderitems` | `GET` | N/A | List of order items | N/A
-`/api/orderitems/{id}` | `GET` | N/A | A order item | `id`*
+`/api/orderitems` | `GET` | N/A | A order item | `orderId`\* , `productId`\*
 `/api/promotions` | `GET` | N/A | List of promotions | N/A
 `/api/promotions/{id}` | `GET` | N/A | A promotion | `id`*
 \* = required
@@ -51,7 +51,7 @@ $ curl -X GET http://localhost:8080/api/cartitems
 ```
 5. Remove cart item `2`<p>
 ```
-$ curl -X DELETE http://localhost:8080/api/cartitems/2
+$ curl -X DELETE "http://localhost:8080/api/cartitems?cartId=2&productId=1"
 ```
 6. List all carts<p>
 ```
@@ -87,7 +87,7 @@ mvn clean install
 ```
 3. Run the following Java command from the project folder<p>
 ```
-java -jar target/checkout-1.0.0-SNAPSHOT.jar
+java -jar target/checkout-2.0.0-SNAPSHOT.jar
 ```
 
 ### Running from executable war file
@@ -103,5 +103,5 @@ mvn clean install
 ```
 3. Run the following Java command from the project folder<p>
 ```
-java -jar target/checkout-1.0.0-SNAPSHOT.war
+java -jar target/checkout-2.0.0-SNAPSHOT.war
 ```

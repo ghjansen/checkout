@@ -9,9 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.constraints.NotNull;
 
-/**
- * The order controller that handles REST requests
- */
 @RestController
 @RequestMapping("/api/orders")
 public class OrderController {
@@ -23,17 +20,13 @@ public class OrderController {
     }
 
     @GetMapping(value = {""})
-    public @NotNull Iterable<Order> getOrders(){
-        synchronized (this.orderService){
-            return this.orderService.getAllOrders();
-        }
+    public @NotNull Iterable<Order> getOrders() {
+        return this.orderService.getAllOrders();
     }
 
     @GetMapping(value = {"/{id}"})
-    public @NotNull Order getOrder(@PathVariable("id") Long id){
-        synchronized (this.orderService){
-            return this.orderService.getOrder(id);
-        }
+    public @NotNull Order getOrder(@PathVariable("id") Long id) {
+        return this.orderService.getOrder(id);
     }
 
 

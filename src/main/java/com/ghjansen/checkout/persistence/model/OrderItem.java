@@ -1,60 +1,62 @@
 package com.ghjansen.checkout.persistence.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.data.annotation.Transient;
+
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
-/**
- * The entity that holds all information about order item
- */
-public class OrderItem implements Entity {
+@Entity
+public class OrderItem {
 
-    @NotNull(message = "Order item id is required")
-    private Long id;
-    @NotNull(message = "Order item order id is required")
-    private Long orderId;
+    @EmbeddedId
+    @JsonIgnore
+    private OrderItemPK pk;
     @NotNull(message = "Order item quantity is required")
+    @Column(nullable = false)
     private Long quantity;
-    @NotNull(message = "Order item product is required")
-    private Product product;
 
-    public OrderItem(@NotNull(message = "Order item order id is required") final Long orderId, @NotNull(message = "Order item quantity is required") final Long quantity, @NotNull(message = "Order item product is required") Product product) {
-        this.orderId = orderId;
+
+    public OrderItem(Order order, Product product, @NotNull(message = "Order item quantity is required") Long quantity) {
+        this.pk = new OrderItemPK();
+        this.pk.setOrder(order);
+        this.pk.setProduct(product);
         this.quantity = quantity;
-        this.product = product;
     }
 
-    public OrderItem(){
-
+    public OrderItem() {
+        super();
     }
 
-    public Long getId() {
-        return id;
+    public OrderItemPK getPk() {
+        return pk;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getOrderId() {
-        return orderId;
-    }
-
-    public void setOrderId(final Long orderId) {
-        this.orderId = orderId;
+    public void setPk(OrderItemPK pk) {
+        this.pk = pk;
     }
 
     public Long getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(final Long quantity) {
+    public void setQuantity(Long quantity) {
         this.quantity = quantity;
     }
 
-    public Product getProduct() {
-        return product;
+    @Transient
+    @JsonIgnore
+    public Order getOrder() {
+        return this.pk.getOrder();
     }
 
-    public void setProduct(final Product product) {
-        this.product = product;
+    @Transient
+    public Long getOrderId() {
+        return this.pk.getOrder().getId();
+    }
+
+    @Transient
+    public Product getProduct() {
+        return this.pk.getProduct();
     }
 }

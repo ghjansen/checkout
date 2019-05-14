@@ -1,38 +1,49 @@
 package com.ghjansen.checkout.persistence.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.*;
 
+import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * The entity that holds all information about cart
- */
-public class Cart implements Entity {
+@Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+public class Cart {
 
-    @NotNull(message = "Cart id is required")
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotNull(message = "Cart date created is required")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.SSS z")
     private ZonedDateTime dateCreated;
     @NotNull(message = "Cart status is required")
     private String status;
-    @NotNull(message = "Cart items is required")
+    @OneToMany(mappedBy = "pk.cart")
+    @Valid
+    @JsonIgnoreProperties(value = {"cartId"})
     private List<CartItem> cartItems;
-    @NotNull(message = "Cart promotions is required")
-    private List<Promotion> promotions;
+    @OneToMany(mappedBy = "pk.cart")
+    @Valid
+    @JsonIgnoreProperties(value = {"cartId"})
+    private List<CartPromotion> cartPromotions;
     @NotNull(message = "Cart total price is required")
     private Double totalPrice;
 
+    public Cart(Long id, @NotNull(message = "Cart date created is required") ZonedDateTime dateCreated, @NotNull(message = "Cart status is required") String status, @Valid List<CartItem> cartItems, @Valid List<CartPromotion> cartPromotions, @NotNull(message = "Cart total price is required") Double totalPrice) {
+        this.id = id;
+        this.dateCreated = dateCreated;
+        this.status = status;
+        this.cartItems = cartItems;
+        this.cartPromotions = cartPromotions;
+        this.totalPrice = totalPrice;
+    }
+
     public Cart() {
-        this.dateCreated = ZonedDateTime.now(ZoneId.of("UTC"));
-        this.status = Status.open.name();
-        this.cartItems = new ArrayList<>();
-        this.promotions = new ArrayList<>();
-        this.totalPrice = 0D;
+
     }
 
     public Long getId() {
@@ -67,12 +78,12 @@ public class Cart implements Entity {
         this.cartItems = cartItems;
     }
 
-    public List<Promotion> getPromotions() {
-        return promotions;
+    public List<CartPromotion> getCartPromotions() {
+        return cartPromotions;
     }
 
-    public void setPromotions(final List<Promotion> promotions) {
-        this.promotions = promotions;
+    public void setCartPromotions(List<CartPromotion> cartPromotions) {
+        this.cartPromotions = cartPromotions;
     }
 
     public Double getTotalPrice() {

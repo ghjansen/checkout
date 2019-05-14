@@ -6,13 +6,12 @@ import org.springframework.validation.annotation.Validated;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
-/**
- * The definition of the service to be used synchronously by other services and by its own controller
- */
 @Validated
 public interface OrderItemService {
 
     @NotNull OrderItem save(final OrderItem orderItem);
-    @NotNull OrderItem getOrderItem(@Min(value = 1L, message = "Invalid product id") final Long id);
+
+    @NotNull OrderItem getOrderItem(@Min(value = 1L, message = "Ivalid order item order id") final Long orderId, @Min(value = 1L, message = "Ivalid order item product id") final Long productId);
+
     @NotNull Iterable<OrderItem> getAllOrderItems();
 }

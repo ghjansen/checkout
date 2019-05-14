@@ -1,67 +1,62 @@
 package com.ghjansen.checkout.persistence.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.springframework.data.annotation.Transient;
+
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
-/**
- * The entity that holds all information about cart item
- */
-public class CartItem implements Entity {
+@Entity
+public class CartItem extends Promotional {
 
-    @NotNull(message = "Cart item id is required")
-    private Long id;
-    @NotNull(message = "Cart item cart id is required")
-    private Long cartId;
+    @EmbeddedId
+    @JsonIgnore
+    private CartItemPK pk;
     @NotNull(message = "Cart item quantity is required")
+    @Column(nullable = false)
     private Long quantity;
-    @NotNull(message = "Cart item product is required")
-    private Product product;
 
-    public CartItem(@NotNull(message = "Cart item id is required") final Long id, @NotNull(message = "Cart item cart id is required") final Long cartId, @NotNull(message = "Cart item quantity is required") final Long quantity, @NotNull(message = "Cart item product is required") final Product product) {
-        this.id = id;
-        this.cartId = cartId;
+    public CartItem(Cart cart, Product product, @NotNull(message = "Cart item quantity is required") Long quantity) {
+        this.pk = new CartItemPK();
+        this.pk.setCart(cart);
+        this.pk.setProduct(product);
         this.quantity = quantity;
-        this.product = product;
     }
 
-    public CartItem(@NotNull(message = "Cart item cart id is required") Long cartId, @NotNull(message = "Cart item quantity is required") Long quantity, @NotNull(message = "Cart item product is required") Product product) {
-        this.cartId = cartId;
-        this.quantity = quantity;
-        this.product = product;
+    public CartItem() {
+        super();
     }
 
-    public CartItem(){
-
+    public CartItemPK getPk() {
+        return pk;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(final Long id) {
-        this.id = id;
-    }
-
-    public Long getCartId() {
-        return cartId;
-    }
-
-    public void setCartId(final Long cartId) {
-        this.cartId = cartId;
+    public void setPk(CartItemPK pk) {
+        this.pk = pk;
     }
 
     public Long getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(final Long quantity) {
+    public void setQuantity(Long quantity) {
         this.quantity = quantity;
     }
 
-    public Product getProduct() {
-        return product;
+    @Transient
+    @JsonIgnore
+    public Cart getCart() {
+        return this.pk.getCart();
     }
 
-    public void setProduct(final Product product) {
-        this.product = product;
+    @Transient
+    public Long getCartId() {
+        return this.pk.getCart().getId();
+    }
+
+    @Transient
+    public Product getProduct() {
+        return this.pk.getProduct();
     }
 }

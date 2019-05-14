@@ -4,17 +4,17 @@ import com.ghjansen.checkout.api.rest.exception.InvalidStateException;
 import com.ghjansen.checkout.api.rest.exception.ResourceNotFoundException;
 import com.ghjansen.checkout.persistence.model.Cart;
 import com.ghjansen.checkout.persistence.model.CartItem;
+import com.ghjansen.checkout.persistence.model.CartItemPK;
 import com.ghjansen.checkout.persistence.model.Product;
 import com.ghjansen.checkout.persistence.repository.CartItemRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
-/**
- * The implementation of the service with synchronization applied when accessing other services
- */
 @Service
+@Transactional
 public class CartItemServiceImpl implements CartItemService {
 
     private CartItemRepository cartItemRepository;
@@ -29,30 +29,29 @@ public class CartItemServiceImpl implements CartItemService {
 
     @Override
     public @NotNull CartItem save(final CartItem cartItem) {
-        cartItem.setId(this.cartItemRepository.getCandidateId());
         return this.cartItemRepository.save(cartItem);
     }
 
     @Override
     public @NotNull CartItem create(final Long cartId, @Min(value = 1L, message = "Ivalid cart item quantity") final Long quantity, @Min(value = 1L, message = "Ivalid cart item product id") final Long productId) {
-        synchronized (this.cartService){
-            synchronized (this.productService){
-                final Cart cart = getExistentOrNewCart(cartId);
-                this.cartService.preventClosedCartChanges(cart);
-                final Product product = this.productService.getProduct(productId);
-                preventDuplicateCartItem(cart, product);
-                final CartItem cartItem = new CartItem(cart.getId(), quantity, product);
-                save(cartItem);
-                cart.getCartItems().add(cartItem);
-                this.cartService.update(cart);
-                return cartItem;
-            }
-        }
+        final Cart cart = getExistentOrNewCart(cartId);
+        this.cartService.preventClosedCartChanges(cart);
+        final Product product = this.productService.getProduct(productId);
+        preventDuplicateCartItem(cart, product);
+        final CartItem cartItem = new CartItem(cart, product, quantity);
+        save(cartItem);
+        cart.getCartItems().add(cartItem);
+        this.cartService.update(cart);
+        return cartItem;
     }
 
+
     @Override
-    public @NotNull CartItem getCartItem(@Min(value = 1L, message = "Ivalid cart item id") final Long id) {
-        return this.cartItemRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Cart item not found"));
+    public @NotNull CartItem getCartItem(@Min(value = 1L, message = "Ivalid cart item cart id") Long cartId, @Min(value = 1L, message = "Ivalid cart item product id") Long productId) {
+        Cart cart = this.cartService.getCart(cartId);
+        Product product = this.productService.getProduct(productId);
+        CartItemPK pk = new CartItemPK(cart, product);
+        return this.cartItemRepository.findById(pk).orElseThrow(() -> new ResourceNotFoundException("Cart item not found"));
     }
 
     @Override
@@ -61,19 +60,19 @@ public class CartItemServiceImpl implements CartItemService {
     }
 
     @Override
-    public void removeCartItem(@Min(value = 1L, message = "Ivalid cart item id") final Long id) {
-        synchronized (this.cartService){
-            final CartItem cartItem = getCartItem(id);
-            final Cart cart = this.cartService.getCart(cartItem.getCartId());
-            this.cartService.preventClosedCartChanges(cart);
-            cart.getCartItems().remove(cartItem);
-            this.cartService.update(cart);
-            this.cartItemRepository.delete(cartItem);
-        }
+    public void removeCartItem(@Min(value = 1L, message = "Ivalid cart item cart id") Long cartId, @Min(value = 1L, message = "Ivalid cart item product id") Long productId) {
+        Cart cart = this.cartService.getCart(cartId);
+        Product product = this.productService.getProduct(productId);
+        CartItemPK pk = new CartItemPK(cart, product);
+        CartItem cartItem = this.cartItemRepository.findById(pk).orElseThrow(() -> new ResourceNotFoundException("Cart item not found"));
+        this.cartService.preventClosedCartChanges(cart);
+        cart.getCartItems().remove(cartItem);
+        this.cartService.update(cart);
+        this.cartItemRepository.delete(cartItem);
     }
 
-    private Cart getExistentOrNewCart(Long cartId){
-        if(cartId != null){
+    private Cart getExistentOrNewCart(Long cartId) {
+        if (cartId != null) {
             return this.cartService.getCart(cartId);
         } else {
             return this.cartService.create();
@@ -82,12 +81,11 @@ public class CartItemServiceImpl implements CartItemService {
 
     @SuppressWarnings("unchecked")
     private <X extends Throwable> void preventDuplicateCartItem(Cart c, Product p) throws X {
-        for(CartItem i : c.getCartItems()){
-            if(i.getProduct().getId().equals(p.getId())){
-                throw (X) new InvalidStateException("The product "+
-                p.getId()+" was already included in the cart "+
-                c.getId()+" through the cart item "+
-                i.getId());
+        for (CartItem i : c.getCartItems()) {
+            if (i.getProduct().getId().equals(p.getId())) {
+                throw (X) new InvalidStateException("The product " +
+                        p.getId() + " was already included in the cart " +
+                        c.getId());
             }
         }
     }

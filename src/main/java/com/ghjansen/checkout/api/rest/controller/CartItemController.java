@@ -6,10 +6,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 
-/**
- * The cart item controller that handles REST requests
- */
 @RestController
 @RequestMapping("/api/cartitems")
 public class CartItemController {
@@ -21,31 +19,37 @@ public class CartItemController {
     }
 
     @GetMapping(value = {""})
-    public @NotNull Iterable<CartItem> getCartItems(){
-        synchronized (this.cartItemService){
-            return this.cartItemService.getAllCartItems();
+    public @NotNull Iterable<CartItem> getCartItemOrList(@RequestParam(value = "cartId", defaultValue = "", required = false) Long cartId, @RequestParam(value = "productId", defaultValue = "", required = false) Long productId) {
+        if (cartId != null && productId != null && cartId > 0 && productId > 0) {
+            return listOf(getCartItem(cartId, productId));
+        } else {
+            return getCartItems();
         }
+    }
+
+    public CartItem getCartItem(Long cartId, Long productId) {
+        return this.cartItemService.getCartItem(cartId, productId);
+    }
+
+    public Iterable<CartItem> getCartItems() {
+        return this.cartItemService.getAllCartItems();
 
     }
 
     @PostMapping(value = {""})
-    public @NotNull CartItem createCartItem(@RequestParam(value="cartId", defaultValue="") Long cartId, @RequestParam(value="quantity", defaultValue="1") Long quantity, @NotEmpty @RequestParam(value="productId") Long productId){
-        synchronized (this.cartItemService){
-            return this.cartItemService.create(cartId, quantity, productId);
-        }
+    public @NotNull CartItem createCartItem(@RequestParam(value = "cartId", defaultValue = "") Long cartId, @RequestParam(value = "quantity", defaultValue = "1") Long quantity, @NotEmpty @RequestParam(value = "productId") Long productId) {
+        return this.cartItemService.create(cartId, quantity, productId);
     }
 
-    @GetMapping(value = {"/{id}"})
-    public @NotNull CartItem getCartItem(@PathVariable("id") Long id){
-        synchronized (this.cartItemService){
-            return this.cartItemService.getCartItem(id);
-        }
+    @DeleteMapping(value = {""})
+    public void deleteCartItem(@NotEmpty @RequestParam(value = "cartId") Long cartId, @NotEmpty @RequestParam(value = "productId") Long productId) {
+        this.cartItemService.removeCartItem(cartId, productId);
     }
 
-    @DeleteMapping(value = {"/{id}"})
-    public void deleteCartItem(@PathVariable("id") Long id){
-        synchronized (this.cartItemService){
-            this.cartItemService.removeCartItem(id);
-        }
+    private Iterable<CartItem> listOf(CartItem item) {
+        ArrayList<CartItem> list = new ArrayList<>();
+        list.add(item);
+        return list;
     }
+
 }
