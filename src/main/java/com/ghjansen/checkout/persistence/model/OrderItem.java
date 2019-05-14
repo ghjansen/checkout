@@ -45,8 +45,14 @@ public class OrderItem {
     }
 
     @Transient
+    @JsonIgnore
     public Order getOrder() {
         return this.pk.getOrder();
+    }
+
+    @Transient
+    public Long getOrderId() {
+        return this.pk.getOrder().getId();
     }
 
     @Transient

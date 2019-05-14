@@ -11,7 +11,7 @@ public interface OrderItemService {
 
     @NotNull OrderItem save(final OrderItem orderItem);
 
-    @NotNull OrderItem getOrderItem(@Min(value = 1L, message = "Invalid product id") final Long id);
+    @NotNull OrderItem getOrderItem(@Min(value = 1L, message = "Ivalid order item order id") final Long orderId, @Min(value = 1L, message = "Ivalid order item product id") final Long productId);
 
     @NotNull Iterable<OrderItem> getAllOrderItems();
 }

@@ -2,6 +2,7 @@ package com.ghjansen.checkout.service;
 
 import com.ghjansen.checkout.api.rest.exception.ResourceNotFoundException;
 import com.ghjansen.checkout.persistence.model.*;
+import com.ghjansen.checkout.persistence.repository.CartPromotionRepository;
 import com.ghjansen.checkout.persistence.repository.PromotionRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,9 +18,11 @@ import java.util.Map;
 public class PromotionServiceImpl implements PromotionService {
 
     private PromotionRepository promotionRepository;
+    private CartPromotionRepository cartPromotionRepository;
 
-    public PromotionServiceImpl(final PromotionRepository promotionRepository) {
+    public PromotionServiceImpl(final PromotionRepository promotionRepository, final CartPromotionRepository cartPromotionRepository) {
         this.promotionRepository = promotionRepository;
+        this.cartPromotionRepository = cartPromotionRepository;
     }
 
     @Override
@@ -39,6 +42,7 @@ public class PromotionServiceImpl implements PromotionService {
 
     @Override
     public @NotNull Cart applyPromotions(Cart cart) {
+        this.cartPromotionRepository.deleteCartPromotions(cart.getId());
         cart.getCartPromotions().clear();
         Iterable<Promotion> promotions = getAllPromotions();
         Iterable<CartItem> items = cart.getCartItems();
@@ -75,6 +79,7 @@ public class PromotionServiceImpl implements PromotionService {
             if (pair.getKey().getClass().equals(Promotion.class)) {
                 Promotion p = (Promotion) pair.getKey();
                 CartPromotion cp = new CartPromotion(cart, p);
+                this.cartPromotionRepository.save(cp);
                 cart.getCartPromotions().add(cp);
                 totalPrice += calculatePromotionalItem(p, i);
             } else if (pair.getKey().getClass().equals(CartItem.class)) {

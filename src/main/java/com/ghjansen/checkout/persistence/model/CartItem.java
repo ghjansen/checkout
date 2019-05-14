@@ -1,6 +1,7 @@
 package com.ghjansen.checkout.persistence.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.data.annotation.Transient;
 
 import javax.persistence.*;
@@ -44,8 +45,14 @@ public class CartItem extends Promotional {
     }
 
     @Transient
+    @JsonIgnore
     public Cart getCart() {
         return this.pk.getCart();
+    }
+
+    @Transient
+    public Long getCartId() {
+        return this.pk.getCart().getId();
     }
 
     @Transient

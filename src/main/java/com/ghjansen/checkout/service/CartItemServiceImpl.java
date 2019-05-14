@@ -4,6 +4,7 @@ import com.ghjansen.checkout.api.rest.exception.InvalidStateException;
 import com.ghjansen.checkout.api.rest.exception.ResourceNotFoundException;
 import com.ghjansen.checkout.persistence.model.Cart;
 import com.ghjansen.checkout.persistence.model.CartItem;
+import com.ghjansen.checkout.persistence.model.CartItemPK;
 import com.ghjansen.checkout.persistence.model.Product;
 import com.ghjansen.checkout.persistence.repository.CartItemRepository;
 import org.springframework.stereotype.Service;
@@ -44,9 +45,13 @@ public class CartItemServiceImpl implements CartItemService {
         return cartItem;
     }
 
+
     @Override
-    public @NotNull CartItem getCartItem(@Min(value = 1L, message = "Ivalid cart item id") final Long id) {
-        return this.cartItemRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Cart item not found"));
+    public @NotNull CartItem getCartItem(@Min(value = 1L, message = "Ivalid cart item cart id") Long cartId, @Min(value = 1L, message = "Ivalid cart item product id") Long productId) {
+        Cart cart = this.cartService.getCart(cartId);
+        Product product = this.productService.getProduct(productId);
+        CartItemPK pk = new CartItemPK(cart, product);
+        return this.cartItemRepository.findById(pk).orElseThrow(() -> new ResourceNotFoundException("Cart item not found"));
     }
 
     @Override
@@ -55,9 +60,11 @@ public class CartItemServiceImpl implements CartItemService {
     }
 
     @Override
-    public void removeCartItem(@Min(value = 1L, message = "Ivalid cart item id") final Long id) {
-        final CartItem cartItem = getCartItem(id);
-        final Cart cart = cartItem.getCart();
+    public void removeCartItem(@Min(value = 1L, message = "Ivalid cart item cart id") Long cartId, @Min(value = 1L, message = "Ivalid cart item product id") Long productId) {
+        Cart cart = this.cartService.getCart(cartId);
+        Product product = this.productService.getProduct(productId);
+        CartItemPK pk = new CartItemPK(cart, product);
+        CartItem cartItem = this.cartItemRepository.findById(pk).orElseThrow(() -> new ResourceNotFoundException("Cart item not found"));
         this.cartService.preventClosedCartChanges(cart);
         cart.getCartItems().remove(cartItem);
         this.cartService.update(cart);

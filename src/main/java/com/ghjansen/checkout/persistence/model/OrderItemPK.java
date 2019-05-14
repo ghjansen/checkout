@@ -13,13 +13,22 @@ import java.io.Serializable;
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "orders")
 public class OrderItemPK implements Serializable {
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "orders_id")
     private Order order;
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "product_id")
     private Product product;
+
+    public OrderItemPK(Order order, Product product) {
+        this.order = order;
+        this.product = product;
+    }
+
+    public OrderItemPK() {
+        super();
+    }
 
     public Order getOrder() {
         return order;

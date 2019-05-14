@@ -2,6 +2,7 @@ package com.ghjansen.checkout.persistence.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
@@ -27,9 +28,11 @@ public class Order {
     private ZonedDateTime dateCreated;
     @OneToMany(mappedBy = "pk.order")
     @Valid
+    @JsonIgnoreProperties(value = {"orderId"})
     private List<OrderItem> orderItems;
     @OneToMany(mappedBy = "pk.order")
     @Valid
+    @JsonIgnoreProperties(value = {"orderId"})
     private List<OrderPromotion> orderPromotions;
     @NotNull(message = "Order total price is required")
     private Double totalPrice;

@@ -4,6 +4,7 @@ import com.ghjansen.checkout.api.rest.exception.InvalidStateException;
 import com.ghjansen.checkout.api.rest.exception.ResourceNotFoundException;
 import com.ghjansen.checkout.persistence.model.*;
 import com.ghjansen.checkout.persistence.repository.CartRepository;
+import com.ghjansen.checkout.persistence.repository.OrderPromotionRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,12 +22,14 @@ public class CartServiceImpl implements CartService {
     private PromotionService promotionService;
     private OrderService orderService;
     private OrderItemService orderItemService;
+    private OrderPromotionRepository orderPromotionRepository;
 
-    public CartServiceImpl(final CartRepository cartRepository, final PromotionService promotionService, final OrderService orderService, final OrderItemService orderItemService) {
+    public CartServiceImpl(final CartRepository cartRepository, final PromotionService promotionService, final OrderService orderService, final OrderItemService orderItemService, final OrderPromotionRepository orderPromotionRepository) {
         this.cartRepository = cartRepository;
         this.promotionService = promotionService;
         this.orderService = orderService;
         this.orderItemService = orderItemService;
+        this.orderPromotionRepository = orderPromotionRepository;
     }
 
     @Override
@@ -82,6 +85,7 @@ public class CartServiceImpl implements CartService {
         ArrayList<OrderPromotion> orderPromotions = new ArrayList<>();
         for(CartPromotion cp : cart.getCartPromotions()){
             OrderPromotion op = new OrderPromotion(order, cp.getPromotion());
+            this.orderPromotionRepository.save(op);
             orderPromotions.add(op);
         }
         order.setOrderPromotions(orderPromotions);

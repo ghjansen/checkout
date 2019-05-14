@@ -13,10 +13,10 @@ public interface CartItemService {
 
     @NotNull CartItem create(final Long cartId, @Min(value = 1L, message = "Ivalid cart item quantity") final Long quantity, @Min(value = 1L, message = "Ivalid cart item product id") final Long productId);
 
-    @NotNull CartItem getCartItem(@Min(value = 1L, message = "Ivalid cart item id") final Long id);
+    @NotNull CartItem getCartItem(@Min(value = 1L, message = "Ivalid cart item cart id") final Long cartId, @Min(value = 1L, message = "Ivalid cart item product id") final Long productId);
 
     @NotNull Iterable<CartItem> getAllCartItems();
 
-    void removeCartItem(@Min(value = 1L, message = "Ivalid cart item id") final Long id);
+    void removeCartItem(@Min(value = 1L, message = "Ivalid cart item cart id") final Long cartId, @Min(value = 1L, message = "Ivalid cart item product id") final Long productId);
 
 }

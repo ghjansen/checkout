@@ -1,8 +1,6 @@
 package com.ghjansen.checkout.persistence.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
 
 import javax.persistence.*;
 import javax.validation.Valid;
@@ -26,9 +24,11 @@ public class Cart {
     private String status;
     @OneToMany(mappedBy = "pk.cart")
     @Valid
+    @JsonIgnoreProperties(value = {"cartId"})
     private List<CartItem> cartItems;
     @OneToMany(mappedBy = "pk.cart")
     @Valid
+    @JsonIgnoreProperties(value = {"cartId"})
     private List<CartPromotion> cartPromotions;
     @NotNull(message = "Cart total price is required")
     private Double totalPrice;

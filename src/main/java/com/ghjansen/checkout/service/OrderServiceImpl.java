@@ -35,7 +35,7 @@ public class OrderServiceImpl implements OrderService {
         order.setOrderItems(new ArrayList<>());
         order.setOrderPromotions(new ArrayList<>());
         order.setTotalPrice(0D);
-        return save(new Order());
+        return save(order);
     }
 
     @Override

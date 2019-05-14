@@ -19,6 +19,10 @@ public class OrderPromotion {
         this.pk.setPromotion(promotion);
     }
 
+    public OrderPromotion(){
+        super();
+    }
+
     public OrderPromotionPK getPk() {
         return pk;
     }
@@ -28,8 +32,14 @@ public class OrderPromotion {
     }
 
     @Transient
+    @JsonIgnore
     public Order getOrder(){
         return this.pk.getOrder();
+    }
+
+    @Transient
+    public Long getOrderId(){
+        return this.pk.getOrder().getId();
     }
 
     @Transient

@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 
 @RestController
 @RequestMapping("/api/cartitems")
@@ -18,7 +19,19 @@ public class CartItemController {
     }
 
     @GetMapping(value = {""})
-    public @NotNull Iterable<CartItem> getCartItems() {
+    public @NotNull Iterable<CartItem> getCartItemOrList(@RequestParam(value = "cartId", defaultValue = "", required = false) Long cartId, @RequestParam(value = "productId", defaultValue = "", required = false) Long productId) {
+        if (cartId != null && productId != null && cartId > 0 && productId > 0) {
+            return listOf(getCartItem(cartId, productId));
+        } else {
+            return getCartItems();
+        }
+    }
+
+    public CartItem getCartItem(Long cartId, Long productId) {
+        return this.cartItemService.getCartItem(cartId, productId);
+    }
+
+    public Iterable<CartItem> getCartItems() {
         return this.cartItemService.getAllCartItems();
 
     }
@@ -28,13 +41,15 @@ public class CartItemController {
         return this.cartItemService.create(cartId, quantity, productId);
     }
 
-    @GetMapping(value = {"/{id}"})
-    public @NotNull CartItem getCartItem(@PathVariable("id") Long id) {
-        return this.cartItemService.getCartItem(id);
+    @DeleteMapping(value = {""})
+    public void deleteCartItem(@NotEmpty @RequestParam(value = "cartId") Long cartId, @NotEmpty @RequestParam(value = "productId") Long productId) {
+        this.cartItemService.removeCartItem(cartId, productId);
     }
 
-    @DeleteMapping(value = {"/{id}"})
-    public void deleteCartItem(@PathVariable("id") Long id) {
-        this.cartItemService.removeCartItem(id);
+    private Iterable<CartItem> listOf(CartItem item) {
+        ArrayList<CartItem> list = new ArrayList<>();
+        list.add(item);
+        return list;
     }
+
 }

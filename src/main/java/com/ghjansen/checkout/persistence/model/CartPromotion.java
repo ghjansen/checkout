@@ -5,6 +5,7 @@ import org.springframework.data.annotation.Transient;
 
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.Table;
 
 @Entity
 public class CartPromotion {
@@ -32,8 +33,14 @@ public class CartPromotion {
     }
 
     @Transient
+    @JsonIgnore
     public Cart getCart(){
         return this.pk.getCart();
+    }
+
+    @Transient
+    public Long getCartId(){
+        return this.pk.getCart().getId();
     }
 
     @Transient
